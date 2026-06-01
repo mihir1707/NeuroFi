@@ -1,0 +1,1419 @@
+{
+  "info": {
+    "name": "Smart Finance Tracker API",
+    "_postman_id": "smart-finance-tracker-v1",
+    "description": "Complete API collection for AI-Powered Smart Finance Tracker Backend.\n\n**Setup:**\n1. Import this collection into Postman\n2. Set the `baseUrl` variable to `http://localhost:5000/api/v1`\n3. Register a user first → Login → Copy the token → Set `token` variable\n4. All protected routes use the `token` variable automatically\n\n**Variables used:**\n- `baseUrl` → `http://localhost:5000/api/v1`\n- `token`   → JWT token from login/register response\n- `userId`, `accountId`, `transactionId`, `budgetId`, `categoryId`, `goalId`, `groupId`, `notificationId`, `receiptId` → Auto-set by tests",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl",        "value": "http://localhost:5000/api/v1", "type": "string" },
+    { "key": "token",          "value": "",  "type": "string" },
+    { "key": "userId",         "value": "",  "type": "string" },
+    { "key": "accountId",      "value": "",  "type": "string" },
+    { "key": "transactionId",  "value": "",  "type": "string" },
+    { "key": "budgetId",       "value": "",  "type": "string" },
+    { "key": "categoryId",     "value": "",  "type": "string" },
+    { "key": "goalId",         "value": "",  "type": "string" },
+    { "key": "groupId",        "value": "",  "type": "string" },
+    { "key": "notificationId", "value": "",  "type": "string" },
+    { "key": "receiptId",      "value": "",  "type": "string" }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+  },
+  "item": [
+
+    {
+      "name": "🔐 Auth",
+      "description": "User registration, login, logout, and profile.",
+      "item": [
+        {
+          "name": "Register",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "  const res = pm.response.json();",
+                  "  pm.collectionVariables.set('token', res.data.token);",
+                  "  pm.collectionVariables.set('userId', res.data.user._id);",
+                  "  pm.test('User registered successfully', () => pm.expect(res.success).to.be.true);",
+                  "  pm.test('Token received', () => pm.expect(res.data.token).to.be.a('string'));",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Test User\",\n  \"email\": \"testuser@example.com\",\n  \"password\": \"password123\",\n  \"currency\": \"INR\",\n  \"phone\": \"9876543210\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/auth/register", "host": ["{{baseUrl}}"], "path": ["auth", "register"] }
+          }
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "  const res = pm.response.json();",
+                  "  pm.collectionVariables.set('token', res.data.token);",
+                  "  pm.collectionVariables.set('userId', res.data.user._id);",
+                  "  pm.test('Login successful', () => pm.expect(res.success).to.be.true);",
+                  "  pm.test('Token received', () => pm.expect(res.data.token).to.be.a('string'));",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"testuser@example.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] }
+          }
+        },
+        {
+          "name": "Get Me (Profile)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Returns user data', () => pm.expect(pm.response.json().data).to.have.property('email'));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/auth/me", "host": ["{{baseUrl}}"], "path": ["auth", "me"] }
+          }
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/auth/logout", "host": ["{{baseUrl}}"], "path": ["auth", "logout"] }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "👤 User Profile",
+      "description": "Manage user profile and password.",
+      "item": [
+        {
+          "name": "Get Profile",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Has user data', () => pm.expect(pm.response.json().data).to.have.property('name'));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/users/profile", "host": ["{{baseUrl}}"], "path": ["users", "profile"] }
+          }
+        },
+        {
+          "name": "Update Profile",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Profile updated', () => pm.expect(pm.response.json().success).to.be.true);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated User\",\n  \"currency\": \"USD\",\n  \"monthlyBudget\": 50000,\n  \"notificationsEnabled\": true,\n  \"aiInsightsEnabled\": true\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/users/profile", "host": ["{{baseUrl}}"], "path": ["users", "profile"] }
+          }
+        },
+        {
+          "name": "Change Password",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200 or 401', () => pm.expect([200, 401]).to.include(pm.response.code));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"currentPassword\": \"password123\",\n  \"newPassword\": \"newpassword456\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/users/change-password", "host": ["{{baseUrl}}"], "path": ["users", "change-password"] }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "💳 Accounts (Wallets)",
+      "description": "Manage bank accounts, cash wallets, credit cards, etc.",
+      "item": [
+        {
+          "name": "Create Account",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "  const res = pm.response.json();",
+                  "  pm.collectionVariables.set('accountId', res.data._id);",
+                  "  pm.test('Account created', () => pm.expect(res.success).to.be.true);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"HDFC Savings Account\",\n  \"type\": \"bank\",\n  \"institution\": \"HDFC Bank\",\n  \"balance\": 50000,\n  \"currency\": \"INR\",\n  \"accountNumberLast4\": \"4242\",\n  \"icon\": \"🏦\",\n  \"color\": \"#3B82F6\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/accounts", "host": ["{{baseUrl}}"], "path": ["accounts"] }
+          }
+        },
+        {
+          "name": "Create Cash Wallet",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Cash Wallet\",\n  \"type\": \"cash\",\n  \"balance\": 5000,\n  \"currency\": \"INR\",\n  \"icon\": \"💵\",\n  \"color\": \"#10B981\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/accounts", "host": ["{{baseUrl}}"], "path": ["accounts"] }
+          }
+        },
+        {
+          "name": "Get All Accounts",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Returns array', () => pm.expect(pm.response.json().data).to.be.an('array'));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/accounts?isArchived=false",
+              "host": ["{{baseUrl}}"],
+              "path": ["accounts"],
+              "query": [{ "key": "isArchived", "value": "false" }]
+            }
+          }
+        },
+        {
+          "name": "Get Account by ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Has account data', () => pm.expect(pm.response.json().data).to.have.property('name'));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/accounts/{{accountId}}", "host": ["{{baseUrl}}"], "path": ["accounts", "{{accountId}}"] }
+          }
+        },
+        {
+          "name": "Update Account",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"HDFC Primary Account\",\n  \"color\": \"#6366F1\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/accounts/{{accountId}}", "host": ["{{baseUrl}}"], "path": ["accounts", "{{accountId}}"] }
+          }
+        },
+        {
+          "name": "Archive Account",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"isArchived\": true\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/accounts/{{accountId}}", "host": ["{{baseUrl}}"], "path": ["accounts", "{{accountId}}"] }
+          }
+        },
+        {
+          "name": "Delete Account",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/accounts/{{accountId}}", "host": ["{{baseUrl}}"], "path": ["accounts", "{{accountId}}"] }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "🏷️ Categories",
+      "description": "Manage spending and income categories.",
+      "item": [
+        {
+          "name": "Get All Categories",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Returns array', () => pm.expect(pm.response.json().data).to.be.an('array'));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/categories?type=expense",
+              "host": ["{{baseUrl}}"],
+              "path": ["categories"],
+              "query": [{ "key": "type", "value": "expense" }]
+            }
+          }
+        },
+        {
+          "name": "Get Income Categories",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/categories?type=income",
+              "host": ["{{baseUrl}}"],
+              "path": ["categories"],
+              "query": [{ "key": "type", "value": "income" }]
+            }
+          }
+        },
+        {
+          "name": "Create Custom Category",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "  pm.collectionVariables.set('categoryId', pm.response.json().data._id);",
+                  "  pm.test('Category created', () => pm.expect(pm.response.json().success).to.be.true);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Pet Care\",\n  \"type\": \"expense\",\n  \"icon\": \"🐾\",\n  \"color\": \"#F59E0B\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/categories", "host": ["{{baseUrl}}"], "path": ["categories"] }
+          }
+        },
+        {
+          "name": "Update Category",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Pet & Vet Care\",\n  \"color\": \"#EF4444\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/categories/{{categoryId}}", "host": ["{{baseUrl}}"], "path": ["categories", "{{categoryId}}"] }
+          }
+        },
+        {
+          "name": "Delete Category",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/categories/{{categoryId}}", "host": ["{{baseUrl}}"], "path": ["categories", "{{categoryId}}"] }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "💸 Transactions",
+      "description": "Create and manage income, expense, and transfer transactions.",
+      "item": [
+        {
+          "name": "Create Expense Transaction",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "  pm.collectionVariables.set('transactionId', pm.response.json().data.transaction._id);",
+                  "  pm.test('Transaction created', () => pm.expect(pm.response.json().success).to.be.true);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"account\": \"{{accountId}}\",\n  \"type\": \"expense\",\n  \"amount\": 350,\n  \"currency\": \"INR\",\n  \"description\": \"Starbucks Coffee\",\n  \"notes\": \"Team meeting\",\n  \"tags\": [\"coffee\", \"work\"],\n  \"transactionDate\": \"2026-05-28T10:00:00.000Z\",\n  \"useAICategory\": true\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/transactions", "host": ["{{baseUrl}}"], "path": ["transactions"] }
+          }
+        },
+        {
+          "name": "Create Income Transaction",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"account\": \"{{accountId}}\",\n  \"type\": \"income\",\n  \"amount\": 75000,\n  \"currency\": \"INR\",\n  \"description\": \"Monthly Salary\",\n  \"notes\": \"May 2026 salary\",\n  \"tags\": [\"salary\"],\n  \"transactionDate\": \"2026-05-01T09:00:00.000Z\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/transactions", "host": ["{{baseUrl}}"], "path": ["transactions"] }
+          }
+        },
+        {
+          "name": "Create Recurring Transaction",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"account\": \"{{accountId}}\",\n  \"type\": \"expense\",\n  \"amount\": 999,\n  \"currency\": \"INR\",\n  \"description\": \"Netflix Subscription\",\n  \"tags\": [\"subscription\", \"entertainment\"],\n  \"isRecurring\": true,\n  \"recurrenceInterval\": \"monthly\",\n  \"transactionDate\": \"2026-05-28T00:00:00.000Z\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/transactions", "host": ["{{baseUrl}}"], "path": ["transactions"] }
+          }
+        },
+        {
+          "name": "Get All Transactions",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Returns data array', () => pm.expect(pm.response.json().data).to.be.an('array'));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/transactions?page=1&limit=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["transactions"],
+              "query": [
+                { "key": "page",  "value": "1" },
+                { "key": "limit", "value": "20" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Transactions (Filter by Type)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/transactions?type=expense&page=1&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["transactions"],
+              "query": [
+                { "key": "type",  "value": "expense" },
+                { "key": "page",  "value": "1" },
+                { "key": "limit", "value": "10" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Transactions (Filter by Date Range)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/transactions?startDate=2026-05-01&endDate=2026-05-31&type=expense",
+              "host": ["{{baseUrl}}"],
+              "path": ["transactions"],
+              "query": [
+                { "key": "startDate", "value": "2026-05-01" },
+                { "key": "endDate",   "value": "2026-05-31" },
+                { "key": "type",      "value": "expense" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Transactions (Search)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/transactions?search=coffee",
+              "host": ["{{baseUrl}}"],
+              "path": ["transactions"],
+              "query": [{ "key": "search", "value": "coffee" }]
+            }
+          }
+        },
+        {
+          "name": "Get Transaction by ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Has transaction data', () => pm.expect(pm.response.json().data).to.have.property('amount'));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/transactions/{{transactionId}}", "host": ["{{baseUrl}}"], "path": ["transactions", "{{transactionId}}"] }
+          }
+        },
+        {
+          "name": "Update Transaction",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"description\": \"Starbucks Coffee (Updated)\",\n  \"notes\": \"Team meeting - updated note\",\n  \"tags\": [\"coffee\", \"work\", \"meeting\"]\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/transactions/{{transactionId}}", "host": ["{{baseUrl}}"], "path": ["transactions", "{{transactionId}}"] }
+          }
+        },
+        {
+          "name": "Delete Transaction",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/transactions/{{transactionId}}", "host": ["{{baseUrl}}"], "path": ["transactions", "{{transactionId}}"] }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "📊 Budgets",
+      "description": "Set and track spending budgets per category.",
+      "item": [
+        {
+          "name": "Create Budget",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "  pm.collectionVariables.set('budgetId', pm.response.json().data._id);",
+                  "  pm.test('Budget created', () => pm.expect(pm.response.json().success).to.be.true);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"category\": \"{{categoryId}}\",\n  \"amount\": 5000,\n  \"currency\": \"INR\",\n  \"period\": \"monthly\",\n  \"alertThreshold\": 80,\n  \"startDate\": \"2026-05-01T00:00:00.000Z\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/budgets", "host": ["{{baseUrl}}"], "path": ["budgets"] }
+          }
+        },
+        {
+          "name": "Get All Budgets",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Has budgets', () => pm.expect(pm.response.json().data).to.be.an('array'));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/budgets?isActive=true&period=monthly",
+              "host": ["{{baseUrl}}"],
+              "path": ["budgets"],
+              "query": [
+                { "key": "isActive", "value": "true" },
+                { "key": "period",   "value": "monthly" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Budget by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/budgets/{{budgetId}}", "host": ["{{baseUrl}}"], "path": ["budgets", "{{budgetId}}"] }
+          }
+        },
+        {
+          "name": "Update Budget",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": 6000,\n  \"alertThreshold\": 75\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/budgets/{{budgetId}}", "host": ["{{baseUrl}}"], "path": ["budgets", "{{budgetId}}"] }
+          }
+        },
+        {
+          "name": "Delete Budget",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/budgets/{{budgetId}}", "host": ["{{baseUrl}}"], "path": ["budgets", "{{budgetId}}"] }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "🎯 Savings Goals",
+      "description": "Create and track savings goals with deposit functionality.",
+      "item": [
+        {
+          "name": "Create Savings Goal",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "  pm.collectionVariables.set('goalId', pm.response.json().data.goal._id);",
+                  "  pm.test('Goal created', () => pm.expect(pm.response.json().success).to.be.true);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Dream Vacation - Goa\",\n  \"description\": \"Beach holiday with family\",\n  \"targetAmount\": 100000,\n  \"currency\": \"INR\",\n  \"targetDate\": \"2027-01-01T00:00:00.000Z\",\n  \"icon\": \"🏖️\",\n  \"color\": \"#06B6D4\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/savings", "host": ["{{baseUrl}}"], "path": ["savings"] }
+          }
+        },
+        {
+          "name": "Get All Savings Goals",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Returns goals', () => pm.expect(pm.response.json().data).to.be.an('array'));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/savings?status=active",
+              "host": ["{{baseUrl}}"],
+              "path": ["savings"],
+              "query": [{ "key": "status", "value": "active" }]
+            }
+          }
+        },
+        {
+          "name": "Get Savings Goal by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/savings/{{goalId}}", "host": ["{{baseUrl}}"], "path": ["savings", "{{goalId}}"] }
+          }
+        },
+        {
+          "name": "Deposit to Goal",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Deposit successful', () => pm.expect(pm.response.json().success).to.be.true);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": 10000,\n  \"notes\": \"Monthly savings deposit\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/savings/{{goalId}}/deposit", "host": ["{{baseUrl}}"], "path": ["savings", "{{goalId}}", "deposit"] }
+          }
+        },
+        {
+          "name": "Update Savings Goal",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Dream Vacation - Goa Trip 2027\",\n  \"targetAmount\": 120000\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/savings/{{goalId}}", "host": ["{{baseUrl}}"], "path": ["savings", "{{goalId}}"] }
+          }
+        },
+        {
+          "name": "Delete Savings Goal",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/savings/{{goalId}}", "host": ["{{baseUrl}}"], "path": ["savings", "{{goalId}}"] }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "👥 Groups & Split Expenses",
+      "description": "Create groups, add members, split and track shared expenses.",
+      "item": [
+        {
+          "name": "Create Group",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "  pm.collectionVariables.set('groupId', pm.response.json().data._id);",
+                  "  pm.test('Group created', () => pm.expect(pm.response.json().success).to.be.true);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Goa Trip 2027\",\n  \"description\": \"Our beach vacation group\",\n  \"currency\": \"INR\",\n  \"icon\": \"🏖️\",\n  \"color\": \"#06B6D4\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/groups", "host": ["{{baseUrl}}"], "path": ["groups"] }
+          }
+        },
+        {
+          "name": "Get All Groups",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Returns groups', () => pm.expect(pm.response.json().data).to.be.an('array'));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/groups", "host": ["{{baseUrl}}"], "path": ["groups"] }
+          }
+        },
+        {
+          "name": "Get Group by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/groups/{{groupId}}", "host": ["{{baseUrl}}"], "path": ["groups", "{{groupId}}"] }
+          }
+        },
+        {
+          "name": "Update Group",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Goa Trip 2027 - Updated\",\n  \"description\": \"Updated group description\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/groups/{{groupId}}", "host": ["{{baseUrl}}"], "path": ["groups", "{{groupId}}"] }
+          }
+        },
+        {
+          "name": "Add Member to Group",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": \"REPLACE_WITH_ANOTHER_USER_ID\",\n  \"role\": \"member\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/groups/{{groupId}}/members", "host": ["{{baseUrl}}"], "path": ["groups", "{{groupId}}", "members"] }
+          }
+        },
+        {
+          "name": "Remove Member from Group",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/groups/{{groupId}}/members/MEMBER_USER_ID", "host": ["{{baseUrl}}"], "path": ["groups", "{{groupId}}", "members", "MEMBER_USER_ID"] }
+          }
+        },
+        {
+          "name": "Create Group Expense (Equal Split)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"description\": \"Hotel Booking - 3 nights\",\n  \"amount\": 12000,\n  \"currency\": \"INR\",\n  \"category\": \"travel\",\n  \"splitType\": \"equal\",\n  \"expenseDate\": \"2026-05-28T00:00:00.000Z\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/groups/{{groupId}}/expenses", "host": ["{{baseUrl}}"], "path": ["groups", "{{groupId}}", "expenses"] }
+          }
+        },
+        {
+          "name": "Get Group Expenses",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Returns expenses', () => pm.expect(pm.response.json().data).to.be.an('array'));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/groups/{{groupId}}/expenses", "host": ["{{baseUrl}}"], "path": ["groups", "{{groupId}}", "expenses"] }
+          }
+        },
+        {
+          "name": "Get Group Balances (Who Owes Who)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Has balances', () => pm.expect(pm.response.json().data).to.have.property('balances'));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/groups/{{groupId}}/balances", "host": ["{{baseUrl}}"], "path": ["groups", "{{groupId}}", "balances"] }
+          }
+        },
+        {
+          "name": "Delete Group",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/groups/{{groupId}}", "host": ["{{baseUrl}}"], "path": ["groups", "{{groupId}}"] }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "🔔 Notifications",
+      "description": "Read and manage in-app notifications.",
+      "item": [
+        {
+          "name": "Get All Notifications",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "if (pm.response.json().data.length > 0) {",
+                  "  pm.collectionVariables.set('notificationId', pm.response.json().data[0]._id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/notifications?isRead=false&page=1&limit=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["notifications"],
+              "query": [
+                { "key": "isRead", "value": "false" },
+                { "key": "page",   "value": "1" },
+                { "key": "limit",  "value": "20" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get All Notifications (All Types)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/notifications", "host": ["{{baseUrl}}"], "path": ["notifications"] }
+          }
+        },
+        {
+          "name": "Mark Single Notification as Read",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/notifications/{{notificationId}}/read", "host": ["{{baseUrl}}"], "path": ["notifications", "{{notificationId}}", "read"] }
+          }
+        },
+        {
+          "name": "Mark ALL Notifications as Read",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Notifications marked', () => pm.expect(pm.response.json().success).to.be.true);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/notifications/read-all", "host": ["{{baseUrl}}"], "path": ["notifications", "read-all"] }
+          }
+        },
+        {
+          "name": "Delete Notification",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/notifications/{{notificationId}}", "host": ["{{baseUrl}}"], "path": ["notifications", "{{notificationId}}"] }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "📈 Reports & Analytics",
+      "description": "Generate financial reports, export CSV, and get currency rates.",
+      "item": [
+        {
+          "name": "Financial Overview (Net Worth)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Has net worth', () => pm.expect(pm.response.json().data).to.have.property('netWorth'));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/reports/overview", "host": ["{{baseUrl}}"], "path": ["reports", "overview"] }
+          }
+        },
+        {
+          "name": "Monthly Report (Current Month)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Has summary', () => pm.expect(pm.response.json().data).to.have.property('summary'));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/reports/monthly?year=2026&month=5",
+              "host": ["{{baseUrl}}"],
+              "path": ["reports", "monthly"],
+              "query": [
+                { "key": "year",  "value": "2026" },
+                { "key": "month", "value": "5" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Yearly Report",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Has monthly breakdown', () => pm.expect(pm.response.json().data).to.have.property('monthlyBreakdown'));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/reports/yearly?year=2026",
+              "host": ["{{baseUrl}}"],
+              "path": ["reports", "yearly"],
+              "query": [{ "key": "year", "value": "2026" }]
+            }
+          }
+        },
+        {
+          "name": "Export Transactions as CSV",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Content-Type is CSV', () => pm.expect(pm.response.headers.get('Content-Type')).to.include('text/csv'));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/reports/export?startDate=2026-05-01&endDate=2026-05-31&type=expense",
+              "host": ["{{baseUrl}}"],
+              "path": ["reports", "export"],
+              "query": [
+                { "key": "startDate", "value": "2026-05-01" },
+                { "key": "endDate",   "value": "2026-05-31" },
+                { "key": "type",      "value": "expense" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Export ALL Transactions as CSV",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/reports/export", "host": ["{{baseUrl}}"], "path": ["reports", "export"] }
+          }
+        },
+        {
+          "name": "Get Currency Exchange Rates",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Has rates', () => pm.expect(pm.response.json().data).to.have.property('rates'));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/reports/currency?base=INR",
+              "host": ["{{baseUrl}}"],
+              "path": ["reports", "currency"],
+              "query": [{ "key": "base", "value": "INR" }]
+            }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "🧾 Receipt Scanner",
+      "description": "Upload receipt images and use AI OCR to extract data.",
+      "item": [
+        {
+          "name": "Upload Receipt (with OCR)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "  pm.collectionVariables.set('receiptId', pm.response.json().data.receipt._id);",
+                  "  pm.test('Receipt uploaded', () => pm.expect(pm.response.json().success).to.be.true);",
+                  "  pm.test('Has suggested transaction', () => pm.expect(pm.response.json().data).to.have.property('suggestedTransaction'));",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "receipt",
+                  "type": "file",
+                  "src": "",
+                  "description": "Select a receipt image (JPEG, PNG, or WebP, max 5MB)"
+                }
+              ]
+            },
+            "url": { "raw": "{{baseUrl}}/receipts", "host": ["{{baseUrl}}"], "path": ["receipts"] }
+          }
+        },
+        {
+          "name": "Get Receipt by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/receipts/{{receiptId}}", "host": ["{{baseUrl}}"], "path": ["receipts", "{{receiptId}}"] }
+          }
+        },
+        {
+          "name": "Link Receipt to Transaction",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"transactionId\": \"{{transactionId}}\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/receipts/{{receiptId}}/link", "host": ["{{baseUrl}}"], "path": ["receipts", "{{receiptId}}", "link"] }
+          }
+        },
+        {
+          "name": "Delete Receipt",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/receipts/{{receiptId}}", "host": ["{{baseUrl}}"], "path": ["receipts", "{{receiptId}}"] }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "🤖 AI Features",
+      "description": "AI-powered categorization, insights, budget predictions, and chatbot.",
+      "item": [
+        {
+          "name": "AI Categorize Single Transaction",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Has category', () => pm.expect(pm.response.json().data).to.have.property('category'));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"description\": \"Swiggy food delivery order\",\n  \"amount\": 450,\n  \"currency\": \"INR\",\n  \"merchantName\": \"Swiggy\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/ai/categorize", "host": ["{{baseUrl}}"], "path": ["ai", "categorize"] }
+          }
+        },
+        {
+          "name": "AI Batch Categorize (Multiple)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Has results array', () => pm.expect(pm.response.json().data.results).to.be.an('array'));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"transactions\": [\n    { \"description\": \"Uber ride to office\", \"amount\": 180 },\n    { \"description\": \"Amazon Prime subscription\", \"amount\": 1499 },\n    { \"description\": \"HDFC Bank EMI\", \"amount\": 12000 },\n    { \"description\": \"BigBasket groceries\", \"amount\": 2300 },\n    { \"description\": \"Freelance project payment\", \"amount\": 25000 }\n  ]\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/ai/categorize/batch", "host": ["{{baseUrl}}"], "path": ["ai", "categorize", "batch"] }
+          }
+        },
+        {
+          "name": "AI Financial Insights",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Has insights', () => pm.expect(pm.response.json().data).to.have.property('insights'));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/ai/insights", "host": ["{{baseUrl}}"], "path": ["ai", "insights"] }
+          }
+        },
+        {
+          "name": "AI Smart Budget Predictions",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Has predictions', () => pm.expect(pm.response.json().data).to.have.property('predictions'));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/ai/predict-budget", "host": ["{{baseUrl}}"], "path": ["ai", "predict-budget"] }
+          }
+        },
+        {
+          "name": "AI Chatbot - First Message",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Has reply', () => pm.expect(pm.response.json().data).to.have.property('reply'));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"How much did I spend this month?\",\n  \"history\": []\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/ai/chat", "host": ["{{baseUrl}}"], "path": ["ai", "chat"] }
+          }
+        },
+        {
+          "name": "AI Chatbot - With Conversation History",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"Am I on track to meet my savings goals?\",\n  \"history\": [\n    { \"role\": \"user\", \"content\": \"How much did I spend this month?\" },\n    { \"role\": \"assistant\", \"content\": \"You spent ₹15,000 this month across 12 transactions.\" }\n  ]\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/ai/chat", "host": ["{{baseUrl}}"], "path": ["ai", "chat"] }
+          }
+        },
+        {
+          "name": "AI Chatbot - Budget Advice",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"Give me tips to save more money this month\",\n  \"history\": []\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/ai/chat", "host": ["{{baseUrl}}"], "path": ["ai", "chat"] }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "🏥 Health Check",
+      "description": "Server health and status endpoints.",
+      "item": [
+        {
+          "name": "Health Check",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Server is running', () => pm.response.to.have.status(200));",
+                  "pm.test('Response is success', () => pm.expect(pm.response.json().success).to.be.true);",
+                  "pm.test('Has uptime', () => pm.expect(pm.response.json()).to.have.property('uptime'));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "http://localhost:5000/health", "host": ["http://localhost:5000"], "path": ["health"] }
+          }
+        },
+        {
+          "name": "404 - Invalid Route Test",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Returns 404 for unknown route', () => pm.response.to.have.status(404));",
+                  "pm.test('Error message present', () => pm.expect(pm.response.json().success).to.be.false);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/this-route-does-not-exist", "host": ["{{baseUrl}}"], "path": ["this-route-does-not-exist"] }
+          }
+        }
+      ]
+    }
+
+  ]
+}

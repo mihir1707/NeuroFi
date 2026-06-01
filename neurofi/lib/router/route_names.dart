@@ -1,0 +1,35 @@
+class RouteNames {
+  static const String splash         = '/';
+  static const String onboarding     = '/onboarding';
+  static const String login          = '/login';
+  static const String register       = '/register';
+  static const String dashboard      = '/dashboard';
+  static const String accounts       = '/accounts';
+  static const String accountDetail  = '/accounts/detail';
+  static const String addAccount     = '/accounts/add';
+  static const String transactions   = '/transactions';
+  static const String transactionDetail = '/transactions/detail';
+  static const String addTransaction = '/transactions/add';
+  static const String budgets        = '/budgets';
+  static const String addBudget      = '/budgets/add';
+  static const String budgetDetail   = '/budgets/detail';
+  static const String savings        = '/savings';
+  static const String addSavingsGoal = '/savings/add';
+  static const String savingsDetail  = '/savings/detail';
+  static const String analytics      = '/analytics';
+  static const String aiChat         = '/ai-chat';
+  static const String aiInsights     = '/ai-insights';
+  static const String categories     = '/categories';
+  static const String addCategory    = '/categories/add';
+  static const String scanner        = '/scanner';
+  static const String receiptPreview = '/scanner/preview';
+  static const String groups         = '/groups';
+  static const String groupDetail    = '/groups/detail';
+  static const String addGroup       = '/groups/add';
+  static const String addGroupExpense = '/groups/add-expense';
+  static const String settlement     = '/groups/settlement';
+  static const String notifications  = '/notifications';
+  static const String profile        = '/profile';
+  static const String editProfile    = '/profile/edit';
+  static const String changePassword = '/profile/change-password';
+}
