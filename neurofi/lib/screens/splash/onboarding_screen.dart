@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../router/route_names.dart';
 
@@ -20,28 +19,22 @@ class _OnboardingScreenState extends State<OnboardingScreen>
 
   final List<_OnboardingData> _pages = const [
     _OnboardingData(
-      emoji: '⚡',
-      gradientColors: [AppColors.forest, AppColors.green],
+      imagePath: 'assets/images/onboarding_logo_1.png',
       title: 'Smart Finance\nAt Your Fingertips',
       subtitle:
           'Track every rupee automatically. Know exactly where your money goes with zero effort.',
-      accentColor: AppColors.sage,
     ),
     _OnboardingData(
-      emoji: '🤖',
-      gradientColors: [AppColors.darkForest, AppColors.sage],
+      imagePath: 'assets/images/onboarding_logo_2.png',
       title: 'AI That Works\nFor You',
       subtitle:
           'Get personalized insights, auto-categorize transactions, and receive budget predictions before you overspend.',
-      accentColor: AppColors.amber,
     ),
     _OnboardingData(
-      emoji: '🎯',
-      gradientColors: [AppColors.amber, AppColors.peach],
+      imagePath: 'assets/images/onboarding_logo_3.png',
       title: 'Achieve Every\nFinancial Goal',
       subtitle:
           'Set savings goals, split expenses with friends, scan receipts, and grow your wealth intelligently.',
-      accentColor: AppColors.peach,
     ),
   ];
 
@@ -50,11 +43,12 @@ class _OnboardingScreenState extends State<OnboardingScreen>
     super.initState();
     _fadeController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 400),
+      duration: const Duration(milliseconds: 600),
     );
-    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(parent: _fadeController, curve: Curves.easeIn),
-    );
+    _fadeAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(parent: _fadeController, curve: Curves.easeIn));
     _fadeController.forward();
   }
 
@@ -83,25 +77,36 @@ class _OnboardingScreenState extends State<OnboardingScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.darkBg0,
-      body: FadeTransition(
-        opacity: _fadeAnimation,
-        child: Stack(
-          children: [
-            PageView.builder(
-              controller: _pageController,
-              itemCount: _pages.length,
-              onPageChanged: (index) => setState(() => _currentPage = index),
-              itemBuilder: (context, index) {
-                return _OnboardingPage(data: _pages[index]);
-              },
+      backgroundColor: const Color(0xFF03070E),
+      body: Stack(
+        children: [
+          Positioned.fill(
+            child: Image.asset(
+              'assets/images/onboarding_bg.avif',
+              fit: BoxFit.cover,
             ),
-            // skip button
-            Positioned(
-              top: 56,
-              right: 24,
-              child: _currentPage < _pages.length - 1
-                  ? GestureDetector(
+          ),
+
+          FadeTransition(
+            opacity: _fadeAnimation,
+            child: SafeArea(
+              child: Stack(
+                children: [
+                  PageView.builder(
+                    controller: _pageController,
+                    itemCount: _pages.length,
+                    onPageChanged: (index) =>
+                        setState(() => _currentPage = index),
+                    itemBuilder: (context, index) {
+                      return _OnboardingPage(data: _pages[index]);
+                    },
+                  ),
+
+                  // Skip Button
+                  Positioned(
+                    top: 16,
+                    right: 24,
+                    child: GestureDetector(
                       onTap: _skip,
                       child: Container(
                         padding: const EdgeInsets.symmetric(
@@ -109,239 +114,141 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                           vertical: 8,
                         ),
                         decoration: BoxDecoration(
-                          color: AppColors.darkGlass2,
-                          borderRadius: BorderRadius.circular(20),
-                          border: Border.all(color: AppColors.darkBorder),
+                          color: Colors.white.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: Colors.white.withOpacity(0.3),
+                            width: 1.5,
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: const Color.fromARGB(
+                                255,
+                                40,
+                                41,
+                                41,
+                              ).withOpacity(0.2),
+                              blurRadius: 12,
+                              spreadRadius: 1,
+                            ),
+                          ],
                         ),
                         child: Text(
                           'Skip',
                           style: AppTextStyles.labelMedium.copyWith(
-                            color: AppColors.darkText1,
-                          ),
-                        ),
-                      ),
-                    )
-                  : const SizedBox.shrink(),
-            ),
-            // bottom controls
-            Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-              child: Container(
-                padding: const EdgeInsets.fromLTRB(24, 0, 24, 48),
-                child: Column(
-                  children: [
-                    // page dots
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: List.generate(
-                        _pages.length,
-                        (i) => AnimatedContainer(
-                          duration: const Duration(milliseconds: 300),
-                          margin: const EdgeInsets.symmetric(horizontal: 4),
-                          width: _currentPage == i ? 24 : 8,
-                          height: 8,
-                          decoration: BoxDecoration(
-                            color: _currentPage == i
-                                ? _pages[_currentPage].accentColor
-                                : AppColors.darkText3.withOpacity(0.4),
-                            borderRadius: BorderRadius.circular(4),
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
                       ),
                     ),
-                    const SizedBox(height: 28),
-                    // continue button
-                    GestureDetector(
-                      onTap: _nextPage,
-                      child: Container(
-                        width: double.infinity,
-                        height: 56,
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: _pages[_currentPage].gradientColors,
-                            begin: Alignment.centerLeft,
-                            end: Alignment.centerRight,
-                          ),
-                          borderRadius: BorderRadius.circular(16),
-                          boxShadow: [
-                            BoxShadow(
-                              color: _pages[_currentPage].gradientColors.first
-                                  .withOpacity(0.4),
-                              blurRadius: 20,
-                              offset: const Offset(0, 8),
-                            ),
-                          ],
-                        ),
-                        child: Center(
-                          child: Text(
-                            _currentPage < _pages.length - 1
-                                ? 'Continue →'
-                                : 'Get Started →',
-                            style: AppTextStyles.buttonText.copyWith(
-                              color: AppColors.lightGrey,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    if (_currentPage == _pages.length - 1) ...[
-                      const SizedBox(height: 16),
-                      GestureDetector(
-                        onTap: () =>
-                            Navigator.pushReplacementNamed(context, RouteNames.register),
-                        child: Text(
-                          'Create a new account',
-                          style: AppTextStyles.labelMedium.copyWith(
-                            color: AppColors.sage,
-                            decoration: TextDecoration.underline,
-                            decorationColor: AppColors.sage,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
+                  ),
 
-class _OnboardingPage extends StatelessWidget {
-  final _OnboardingData data;
-  const _OnboardingPage({required this.data});
+                  // Bottom Controls
+                  Positioned(
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    child: Container(
+                      padding: const EdgeInsets.fromLTRB(24, 0, 24, 30),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          // Page Dots
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: List.generate(
+                              _pages.length,
+                              (i) => AnimatedContainer(
+                                duration: const Duration(milliseconds: 300),
+                                margin: const EdgeInsets.symmetric(
+                                  horizontal: 4,
+                                ),
+                                width: _currentPage == i ? 24 : 8,
+                                height: 8,
+                                decoration: BoxDecoration(
+                                  color: _currentPage == i
+                                      ? Colors.white
+                                      : const Color.fromARGB(255, 88, 85, 85),
+                                  borderRadius: BorderRadius.circular(6),
+                                  boxShadow: _currentPage == i
+                                      ? [
+                                          const BoxShadow(
+                                            color: Color.fromARGB(
+                                              255,
+                                              118,
+                                              119,
+                                              119,
+                                            ),
+                                            blurRadius: 12,
+                                          ),
+                                        ]
+                                      : null,
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 36),
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [AppColors.darkBg0, AppColors.darkBg1],
-        ),
-      ),
-      child: Column(
-        children: [
-          Expanded(
-            flex: 3,
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                Container(
-                  width: double.infinity,
-                  margin: const EdgeInsets.all(24),
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [
-                        AppColors.darkBg1,
-                        AppColors.darkForest.withOpacity(0.3),
-                      ],
-                    ),
-                    borderRadius: BorderRadius.circular(32),
-                    border: Border.all(
-                      color: data.gradientColors.first.withOpacity(0.3),
-                    ),
-                  ),
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      Positioned(
-                        top: -40,
-                        child: Container(
-                          width: 220,
-                          height: 220,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            gradient: RadialGradient(
-                              colors: [
-                                data.gradientColors.first.withOpacity(0.3),
-                                Colors.transparent,
-                              ],
+                          // Continue / Get Started Button
+                          GestureDetector(
+                            onTap: _nextPage,
+                            child: Container(
+                              width: double.infinity,
+                              height: 56,
+                              decoration: BoxDecoration(
+                                color: Colors.transparent,
+                                borderRadius: BorderRadius.circular(16),
+                                border: Border.all(
+                                  color: Colors.white,
+                                  width: 1.5,
+                                ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: const Color.fromARGB(255, 22, 22, 22),
+                                    blurRadius: 15,
+                                    spreadRadius: 1,
+                                  ),
+                                ],
+                              ),
+                              child: Center(
+                                child: Text(
+                                  _currentPage < _pages.length - 1
+                                      ? 'Continue →'
+                                      : 'Get Started →',
+                                  style: AppTextStyles.buttonText.copyWith(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                              ),
                             ),
                           ),
-                        ),
-                      ),
-                      Positioned(
-                        bottom: -40,
-                        right: -20,
-                        child: Container(
-                          width: 160,
-                          height: 160,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            gradient: RadialGradient(
-                              colors: [
-                                data.gradientColors.last.withOpacity(0.2),
-                                Colors.transparent,
-                              ],
+
+                          if (_currentPage == _pages.length - 1) ...[
+                            const SizedBox(height: 24),
+                            GestureDetector(
+                              onTap: () => Navigator.pushReplacementNamed(
+                                context,
+                                RouteNames.register,
+                              ),
+                              child: Text(
+                                'Create a new account',
+                                style: AppTextStyles.labelMedium.copyWith(
+                                  color: Colors.white,
+                                  decoration: TextDecoration.underline,
+                                  decorationColor: Colors.white,
+                                  fontSize: 14,
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        width: 120,
-                        height: 120,
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                            colors: data.gradientColors,
-                          ),
-                          borderRadius: BorderRadius.circular(32),
-                          boxShadow: [
-                            BoxShadow(
-                              color: data.gradientColors.first.withOpacity(0.45),
-                              blurRadius: 50,
-                              spreadRadius: 5,
-                            ),
+                          ] else ...[
+                            const SizedBox(height: 24),
+                            // Invisible spacer to match height of the link
+                            const Opacity(opacity: 0, child: Text('Spacer')),
                           ],
-                        ),
-                        child: Center(
-                          child: Text(
-                            data.emoji,
-                            style: const TextStyle(fontSize: 56),
-                          ),
-                        ),
+                        ],
                       ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Expanded(
-            flex: 2,
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(28, 8, 28, 140),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ShaderMask(
-                    shaderCallback: (bounds) => LinearGradient(
-                      colors: data.gradientColors,
-                    ).createShader(bounds),
-                    child: Text(
-                      data.title,
-                      style: AppTextStyles.headingLarge.copyWith(
-                        color: Colors.white,
-                        height: 1.2,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 14),
-                  Text(
-                    data.subtitle,
-                    style: AppTextStyles.bodyMedium.copyWith(
-                      color: AppColors.darkText2,
-                      height: 1.6,
                     ),
                   ),
                 ],
@@ -354,18 +261,77 @@ class _OnboardingPage extends StatelessWidget {
   }
 }
 
+class _OnboardingPage extends StatelessWidget {
+  final _OnboardingData data;
+  const _OnboardingPage({required this.data});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Spacer(flex: 2),
+
+          // Central Image Graphic
+          SizedBox(
+            width: 250,
+            height: 250,
+            child: Image.asset(data.imagePath, fit: BoxFit.contain),
+          ),
+
+          const Spacer(flex: 1),
+
+          // Metallic Text Heading
+          ShaderMask(
+            shaderCallback: (bounds) => const LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [Color(0xFFFFFFFF), Color(0xFFB0C4DE), Color(0xFF8FA3B8)],
+            ).createShader(bounds),
+            child: Text(
+              data.title,
+              textAlign: TextAlign.center,
+              style: AppTextStyles.headingLarge.copyWith(
+                fontSize: 30,
+                height: 1.2,
+                color: Colors.white,
+                fontWeight: FontWeight.w400,
+                fontFamily:
+                    'serif', // Gives that elegant look from the screenshot
+              ),
+            ),
+          ),
+
+          const SizedBox(height: 24),
+
+          // Subtitle
+          Text(
+            data.subtitle,
+            textAlign: TextAlign.center,
+            style: AppTextStyles.bodyMedium.copyWith(
+              color: const Color.fromARGB(255, 255, 255, 255),
+              height: 1.5,
+              fontSize: 14,
+            ),
+          ),
+
+          const Spacer(flex: 3),
+        ],
+      ),
+    );
+  }
+}
+
 class _OnboardingData {
-  final String emoji;
-  final List<Color> gradientColors;
+  final String imagePath;
   final String title;
   final String subtitle;
-  final Color accentColor;
 
   const _OnboardingData({
-    required this.emoji,
-    required this.gradientColors,
+    required this.imagePath,
     required this.title,
     required this.subtitle,
-    required this.accentColor,
   });
 }

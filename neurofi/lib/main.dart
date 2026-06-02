@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:neurofi/screens/main_shell.dart';
+import 'package:neurofi/screens/splash/onboarding_screen.dart';
 import 'package:neurofi/screens/splash/splash_screen.dart';
 import 'package:provider/provider.dart';
 import 'config/dio_client.dart';
@@ -67,9 +68,10 @@ class NeuroFiApp extends StatelessWidget {
             theme: AppTheme.lightTheme,
             darkTheme: AppTheme.darkTheme,
             // home: MainShell(),
-            home: SplashScreen(),
-            // initialRoute: RouteNames.splash,
-            // onGenerateRoute: AppRouter.generateRoute,
+            // home: SplashScreen(),
+            // home: OnboardingScreen(),
+            initialRoute: RouteNames.splash,
+            onGenerateRoute: AppRouter.generateRoute,
           );
         },
       ),

@@ -7,18 +7,19 @@ class DioClient {
 
   static void initialize() {
     _dio.options = BaseOptions(
-      baseUrl:        AppConfig.baseUrl,
+      baseUrl: AppConfig.baseUrl,
       connectTimeout: Duration(seconds: AppConfig.connectTimeout),
       receiveTimeout: Duration(seconds: AppConfig.receiveTimeout),
       headers: {
         'Content-Type': 'application/json',
-        'Accept':       'application/json',
+        'Accept': 'application/json',
       },
     );
 
     _dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) async {
+          print('[DIO] ${options.method} ${options.path}');
           final prefs = await SharedPreferences.getInstance();
           final token = prefs.getString('token');
           if (token != null && token.isNotEmpty) {
@@ -27,7 +28,8 @@ class DioClient {
           return handler.next(options);
         },
         onError: (error, handler) {
-          print('[API Error] ${error.response?.statusCode} — ${error.message}');
+          print('[DIO Error] ${error.response?.statusCode} — ${error.message}');
+          print('[DIO Error Details] ${error.response?.data}');
           return handler.next(error);
         },
       ),
