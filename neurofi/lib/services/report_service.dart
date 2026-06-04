@@ -48,9 +48,9 @@ class ReportService {
     final response = await _dio.get(
       '/reports/export',
       queryParameters: {
-        if (startDate != null) 'startDate': startDate,
-        if (endDate != null)   'endDate':   endDate,
-        if (type != null)      'type':       type,
+        'startDate': ?startDate,
+        'endDate':   ?endDate,
+        'type':       ?type,
       },
       options: Options(responseType: ResponseType.plain),
     );

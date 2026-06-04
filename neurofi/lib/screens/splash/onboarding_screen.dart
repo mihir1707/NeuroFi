@@ -114,10 +114,10 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                           vertical: 8,
                         ),
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.1),
+                          color: Colors.white.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(12),
                           border: Border.all(
-                            color: Colors.white.withOpacity(0.3),
+                            color: Colors.white.withValues(alpha: 0.3),
                             width: 1.5,
                           ),
                           boxShadow: [
@@ -127,7 +127,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                                 40,
                                 41,
                                 41,
-                              ).withOpacity(0.2),
+                              ).withValues(alpha: 0.2),
                               blurRadius: 12,
                               spreadRadius: 1,
                             ),

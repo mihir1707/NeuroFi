@@ -56,7 +56,7 @@ class _SavingsScreenState extends State<SavingsScreen>
               const SliverToBoxAdapter(child: SizedBox(height: 16)),
               if (isLoading)
                 SliverList(delegate: SliverChildBuilderDelegate(
-                  (_, __) => _shimmer(), childCount: 3))
+                  (_, _) => _shimmer(), childCount: 3))
               else if (goals.isEmpty)
                 SliverToBoxAdapter(child: _emptyState(context))
               else
@@ -107,7 +107,7 @@ class _SavingsScreenState extends State<SavingsScreen>
             colors: [AppColors.darkForest, AppColors.darkBg1],
             begin: Alignment.topLeft, end: Alignment.bottomRight),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: AppColors.forest.withOpacity(0.4)),
+        border: Border.all(color: AppColors.forest.withValues(alpha: 0.4)),
       ),
       child: Row(children: [
         const Text('💰', style: TextStyle(fontSize: 36)),
@@ -186,7 +186,7 @@ class _GoalCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
               color: goal.isCompleted
-                  ? AppColors.green.withOpacity(0.3) : AppColors.darkBorder),
+                  ? AppColors.green.withValues(alpha: 0.3) : AppColors.darkBorder),
         ),
         child: Row(
           children: [
@@ -219,7 +219,7 @@ class _GoalCard extends StatelessWidget {
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                         decoration: BoxDecoration(
-                          color: AppColors.green.withOpacity(0.15),
+                          color: AppColors.green.withValues(alpha: 0.15),
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Text('Done ✓',

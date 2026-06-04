@@ -18,12 +18,12 @@ class TransactionService {
     final Map<String, dynamic> params = {
       'page':  page,
       'limit': limit,
-      if (type != null)       'type':      type,
-      if (accountId != null)  'account':   accountId,
-      if (categoryId != null) 'category':  categoryId,
-      if (search != null)     'search':    search,
-      if (startDate != null)  'startDate': startDate,
-      if (endDate != null)    'endDate':   endDate,
+      'type':      ?type,
+      'account':   ?accountId,
+      'category':  ?categoryId,
+      'search':    ?search,
+      'startDate': ?startDate,
+      'endDate':   ?endDate,
     };
     final response = await _dio.get('/transactions', queryParameters: params);
     final List data = response.data['data'];
@@ -60,8 +60,8 @@ class TransactionService {
       'transactionDate': transactionDate,
       'isRecurring':     isRecurring,
       'useAICategory':   useAICategory,
-      if (categoryId != null)         'category':           categoryId,
-      if (recurrenceInterval != null) 'recurrenceInterval': recurrenceInterval,
+      'category':           ?categoryId,
+      'recurrenceInterval': ?recurrenceInterval,
     });
     final txData = response.data['data']['transaction'] ?? response.data['data'];
     return TransactionModel.fromJson(txData);

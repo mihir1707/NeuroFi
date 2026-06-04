@@ -29,7 +29,7 @@ class RecentTransactionsSection extends StatelessWidget {
               Text(
                 'Recent Transactions',
                 style: AppTextStyles.headingSmall.copyWith(
-                  color: AppColors.lightGrey,
+                  color: Colors.white,
                 ),
               ),
               GestureDetector(
@@ -37,7 +37,7 @@ class RecentTransactionsSection extends StatelessWidget {
                 child: Text(
                   'See all',
                   style: AppTextStyles.labelMedium.copyWith(
-                    color: AppColors.sage,
+                    color: Colors.white,
                   ),
                 ),
               ),
@@ -67,7 +67,7 @@ class RecentTransactionsSection extends StatelessWidget {
           margin:  const EdgeInsets.only(bottom: 12),
           height:  64,
           decoration: BoxDecoration(
-            color:        AppColors.darkBg1,
+            color:        const Color(0xFF0A0A0A),
             borderRadius: BorderRadius.circular(16),
           ),
         ),
@@ -80,26 +80,26 @@ class RecentTransactionsSection extends StatelessWidget {
       width:   double.infinity,
       padding: const EdgeInsets.symmetric(vertical: 40),
       decoration: BoxDecoration(
-        color:        AppColors.darkBg1,
+        color:        const Color(0xFF0A0A0A),
         borderRadius: BorderRadius.circular(20),
-        border:       Border.all(color: AppColors.darkBorder),
+        border:       Border.all(color: const Color(0x26FFFFFF)),
       ),
       child: Column(
         children: [
           Icon(
             Icons.receipt_long_outlined,
-            color: AppColors.darkText3,
+            color: Colors.white.withValues(alpha: 0.3),
             size:  48,
           ),
           const SizedBox(height: 12),
           Text(
             'No transactions yet',
-            style: AppTextStyles.bodyMedium.copyWith(color: AppColors.darkText2),
+            style: AppTextStyles.bodyMedium.copyWith(color: Colors.white.withValues(alpha: 0.5)),
           ),
           const SizedBox(height: 6),
           Text(
             'Tap + to add your first transaction',
-            style: AppTextStyles.labelSmall.copyWith(color: AppColors.darkText3),
+            style: AppTextStyles.labelSmall.copyWith(color: Colors.white.withValues(alpha: 0.3)),
           ),
         ],
       ),
@@ -118,10 +118,10 @@ class _TransactionTile extends StatelessWidget {
     final isIncome   = transaction.isIncome;
     final isTransfer = transaction.isTransfer;
     final color      = isTransfer
-        ? AppColors.amber
+        ? Colors.amber
         : isIncome
-            ? AppColors.green
-            : AppColors.red;
+            ? Colors.green
+            : Colors.red;
     final icon = isTransfer
         ? Icons.swap_horiz_rounded
         : isIncome
@@ -139,9 +139,9 @@ class _TransactionTile extends StatelessWidget {
         margin:  const EdgeInsets.only(bottom: 10),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         decoration: BoxDecoration(
-          color:        AppColors.darkBg1,
+          color:        const Color(0xFF0A0A0A),
           borderRadius: BorderRadius.circular(16),
-          border:       Border.all(color: AppColors.darkBorder),
+          border:       Border.all(color: const Color(0x26FFFFFF)),
         ),
         child: Row(
           children: [
@@ -149,7 +149,7 @@ class _TransactionTile extends StatelessWidget {
               width:  44,
               height: 44,
               decoration: BoxDecoration(
-                color:        color.withOpacity(0.12),
+                color:        color.withValues(alpha: 0.12),
                 borderRadius: BorderRadius.circular(13),
               ),
               child: Center(
@@ -169,7 +169,7 @@ class _TransactionTile extends StatelessWidget {
                         ? transaction.description
                         : transaction.displayCategory,
                     style: AppTextStyles.bodyMedium.copyWith(
-                      color:      AppColors.lightGrey,
+                      color:      Colors.white,
                       fontWeight: FontWeight.w600,
                     ),
                     overflow: TextOverflow.ellipsis,
@@ -178,7 +178,7 @@ class _TransactionTile extends StatelessWidget {
                   Text(
                     DateFormatter.toRelative(transaction.transactionDate),
                     style: AppTextStyles.labelSmall.copyWith(
-                      color: AppColors.darkText3,
+                      color: Colors.white.withValues(alpha: 0.4),
                     ),
                   ),
                 ],
@@ -198,7 +198,7 @@ class _TransactionTile extends StatelessWidget {
                   margin:  const EdgeInsets.only(top: 4),
                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                   decoration: BoxDecoration(
-                    color:        color.withOpacity(0.1),
+                    color:        color.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(6),
                   ),
                   child: Text(

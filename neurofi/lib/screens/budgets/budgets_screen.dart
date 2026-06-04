@@ -64,7 +64,7 @@ class _BudgetsScreenState extends State<BudgetsScreen>
               const SliverToBoxAdapter(child: SizedBox(height: 12)),
               if (isLoading)
                 SliverList(delegate: SliverChildBuilderDelegate(
-                  (_, __) => _shimmer(), childCount: 3))
+                  (_, _) => _shimmer(), childCount: 3))
               else if (budgets.isEmpty)
                 SliverToBoxAdapter(child: _emptyState(context))
               else
@@ -122,7 +122,7 @@ class _BudgetsScreenState extends State<BudgetsScreen>
             begin: Alignment.topLeft, end: Alignment.bottomRight,
           ),
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: AppColors.forest.withOpacity(0.4)),
+          border: Border.all(color: AppColors.forest.withValues(alpha: 0.4)),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -228,7 +228,7 @@ class _BudgetCard extends StatelessWidget {
           color: AppColors.darkBg1,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(color: budget.isExceeded
-              ? AppColors.red.withOpacity(0.3) : AppColors.darkBorder),
+              ? AppColors.red.withValues(alpha: 0.3) : AppColors.darkBorder),
         ),
         child: Column(
           children: [
@@ -237,7 +237,7 @@ class _BudgetCard extends StatelessWidget {
                 Container(
                   width: 42, height: 42,
                   decoration: BoxDecoration(
-                    color: color.withOpacity(0.12),
+                    color: color.withValues(alpha: 0.12),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Center(child: Text(catIcon, style: const TextStyle(fontSize: 20))),

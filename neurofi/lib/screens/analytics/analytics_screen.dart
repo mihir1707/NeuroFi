@@ -370,7 +370,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen>
                             width: 8,
                             height: ih.clamp(4, 90),
                             decoration: BoxDecoration(
-                              color: AppColors.green.withOpacity(0.8),
+                              color: AppColors.green.withValues(alpha: 0.8),
                               borderRadius: const BorderRadius.vertical(top: Radius.circular(4)),
                             ),
                           ),
@@ -380,7 +380,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen>
                             width: 8,
                             height: eh.clamp(4, 90),
                             decoration: BoxDecoration(
-                              color: AppColors.red.withOpacity(0.8),
+                              color: AppColors.red.withValues(alpha: 0.8),
                               borderRadius: const BorderRadius.vertical(top: Radius.circular(4)),
                             ),
                           ),
@@ -426,9 +426,9 @@ class _AnalyticsScreenState extends State<AnalyticsScreen>
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                  colors: [color.withOpacity(0.2), AppColors.darkBg1]),
+                  colors: [color.withValues(alpha: 0.2), AppColors.darkBg1]),
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: color.withOpacity(0.3)),
+              border: Border.all(color: color.withValues(alpha: 0.3)),
             ),
             child: Row(
               children: [

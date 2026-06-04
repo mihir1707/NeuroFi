@@ -38,7 +38,7 @@ class _AccountsScreenState extends State<AccountsScreen>
     final total     = provider.totalBalance;
 
     return Scaffold(
-      backgroundColor: AppColors.darkBg0,
+      backgroundColor: Colors.black,
       body: SafeArea(
         child: Column(
           children: [
@@ -46,8 +46,8 @@ class _AccountsScreenState extends State<AccountsScreen>
             Expanded(
               child: RefreshIndicator(
                 onRefresh: () => provider.loadAccounts(),
-                color: AppColors.green,
-                backgroundColor: AppColors.darkBg1,
+                color: Colors.white,
+                backgroundColor: const Color(0xFF111111),
                 child: CustomScrollView(
                   physics: const AlwaysScrollableScrollPhysics(),
                   slivers: [
@@ -60,14 +60,14 @@ class _AccountsScreenState extends State<AccountsScreen>
                         padding: const EdgeInsets.symmetric(horizontal: 20),
                         child: Text('My Accounts',
                             style: AppTextStyles.headingSmall.copyWith(
-                                color: AppColors.lightGrey)),
+                                color: Colors.white)),
                       ),
                     ),
                     const SliverToBoxAdapter(child: SizedBox(height: 12)),
                     if (isLoading)
                       SliverList(
                         delegate: SliverChildBuilderDelegate(
-                          (_, __) => _shimmerCard(),
+                          (_, _) => _shimmerCard(),
                           childCount: 3,
                         ),
                       )
@@ -101,22 +101,21 @@ class _AccountsScreenState extends State<AccountsScreen>
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text('Accounts',
-              style: AppTextStyles.headingLarge.copyWith(color: AppColors.lightGrey)),
+              style: AppTextStyles.headingLarge.copyWith(color: Colors.white)),
           GestureDetector(
             onTap: () => Navigator.pushNamed(context, RouteNames.addAccount),
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
               decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                    colors: [AppColors.forest, AppColors.green]),
+                color: Colors.white,
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Row(
                 children: [
-                  const Icon(Icons.add_rounded, color: AppColors.lightGrey, size: 16),
+                  const Icon(Icons.add_rounded, color: Colors.black, size: 16),
                   const SizedBox(width: 4),
                   Text('Add', style: AppTextStyles.labelMedium.copyWith(
-                      color: AppColors.lightGrey)),
+                      color: Colors.black)),
                 ],
               ),
             ),
@@ -131,7 +130,7 @@ class _AccountsScreenState extends State<AccountsScreen>
       margin: const EdgeInsets.fromLTRB(20, 0, 20, 12),
       height: 80,
       decoration: BoxDecoration(
-        color: AppColors.darkBg1,
+        color: const Color(0xFF111111),
         borderRadius: BorderRadius.circular(16),
       ),
     );
@@ -145,10 +144,10 @@ class _AccountsScreenState extends State<AccountsScreen>
           const Text('🏦', style: TextStyle(fontSize: 56)),
           const SizedBox(height: 16),
           Text('No accounts yet',
-              style: AppTextStyles.bodyMedium.copyWith(color: AppColors.darkText2)),
+              style: AppTextStyles.bodyMedium.copyWith(color: Colors.white.withValues(alpha: 0.6))),
           const SizedBox(height: 6),
           Text('Add your bank, wallet or card to get started',
-              style: AppTextStyles.labelSmall.copyWith(color: AppColors.darkText3),
+              style: AppTextStyles.labelSmall.copyWith(color: Colors.white.withValues(alpha: 0.4)),
               textAlign: TextAlign.center),
           const SizedBox(height: 20),
           GestureDetector(
@@ -156,11 +155,11 @@ class _AccountsScreenState extends State<AccountsScreen>
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
               decoration: BoxDecoration(
-                gradient: const LinearGradient(colors: [AppColors.forest, AppColors.green]),
+                color: Colors.white,
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Text('Add Account',
-                  style: AppTextStyles.labelMedium.copyWith(color: AppColors.lightGrey)),
+                  style: AppTextStyles.labelMedium.copyWith(color: Colors.black)),
             ),
           ),
         ],
@@ -181,16 +180,12 @@ class _TotalBalanceCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            colors: [AppColors.darkForest, AppColors.forest],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
+          color: const Color(0xFF111111),
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: AppColors.forest.withOpacity(0.4)),
+          border: Border.all(color: const Color(0x33FFFFFF)),
           boxShadow: [
             BoxShadow(
-                color: AppColors.forest.withOpacity(0.3),
+                color: Colors.black.withValues(alpha: 0.4),
                 blurRadius: 20,
                 offset: const Offset(0, 8)),
           ],
@@ -200,11 +195,11 @@ class _TotalBalanceCard extends StatelessWidget {
           children: [
             Text('Net Worth',
                 style: AppTextStyles.labelMedium.copyWith(
-                    color: AppColors.sage.withOpacity(0.8))),
+                    color: Colors.white.withValues(alpha: 0.6))),
             const SizedBox(height: 8),
             Text(CurrencyFormatter.format(total, currency),
                 style: AppTextStyles.displayLarge.copyWith(
-                    color: AppColors.lightGrey,
+                    color: Colors.white,
                     fontWeight: FontWeight.w800,
                     fontSize: 32)),
             const SizedBox(height: 4),
@@ -212,14 +207,14 @@ class _TotalBalanceCard extends StatelessWidget {
               children: [
                 Icon(
                   total >= 0 ? Icons.trending_up_rounded : Icons.trending_down_rounded,
-                  color: total >= 0 ? AppColors.green : AppColors.red,
+                  color: total >= 0 ? Colors.green : Colors.red,
                   size: 16,
                 ),
                 const SizedBox(width: 4),
                 Text(
                   total >= 0 ? 'Positive balance' : 'Negative balance',
                   style: AppTextStyles.labelSmall.copyWith(
-                    color: total >= 0 ? AppColors.green : AppColors.red,
+                    color: total >= 0 ? Colors.green : Colors.red,
                   ),
                 ),
               ],
@@ -249,7 +244,7 @@ class _AccountCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final icon  = _typeIcons[account.type] ?? Icons.account_balance_rounded;
-    final color = account.balance >= 0 ? AppColors.green : AppColors.red;
+    final color = account.balance >= 0 ? Colors.green : Colors.red;
 
     return GestureDetector(
       onTap: () => Navigator.pushNamed(context, RouteNames.accountDetail,
@@ -258,22 +253,22 @@ class _AccountCard extends StatelessWidget {
         margin: const EdgeInsets.fromLTRB(20, 0, 20, 10),
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: AppColors.darkBg1,
+          color: const Color(0xFF111111),
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: AppColors.darkBorder),
+          border: Border.all(color: const Color(0x33FFFFFF)),
         ),
         child: Row(
           children: [
             Container(
               width: 48, height: 48,
               decoration: BoxDecoration(
-                color: AppColors.forest.withOpacity(0.15),
+                color: const Color(0x1AFFFFFF),
                 borderRadius: BorderRadius.circular(13),
               ),
               child: Center(
                 child: account.icon.isNotEmpty
                     ? Text(account.icon, style: const TextStyle(fontSize: 22))
-                    : Icon(icon, color: AppColors.sage, size: 22),
+                    : Icon(icon, color: Colors.white.withValues(alpha: 0.6), size: 22),
               ),
             ),
             const SizedBox(width: 14),
@@ -283,10 +278,10 @@ class _AccountCard extends StatelessWidget {
                 children: [
                   Text(account.name,
                       style: AppTextStyles.bodyMedium.copyWith(
-                          color: AppColors.lightGrey, fontWeight: FontWeight.w600)),
+                          color: Colors.white, fontWeight: FontWeight.w600)),
                   Text(
                     account.type.replaceAll('_', ' ').toUpperCase(),
-                    style: AppTextStyles.labelSmall.copyWith(color: AppColors.darkText3),
+                    style: AppTextStyles.labelSmall.copyWith(color: Colors.white.withValues(alpha: 0.6)),
                   ),
                 ],
               ),
@@ -301,12 +296,12 @@ class _AccountCard extends StatelessWidget {
                 ),
                 if (account.balance < 0)
                   Text('debt', style: AppTextStyles.labelSmall.copyWith(
-                      color: AppColors.red, fontSize: 9)),
+                      color: Colors.red, fontSize: 9)),
               ],
             ),
             const SizedBox(width: 8),
-            const Icon(Icons.chevron_right_rounded,
-                color: AppColors.darkText3, size: 18),
+            Icon(Icons.chevron_right_rounded,
+                color: Colors.white.withValues(alpha: 0.4), size: 18),
           ],
         ),
       ),

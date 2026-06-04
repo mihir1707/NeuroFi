@@ -29,23 +29,23 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
     final ok = await showDialog<bool>(
       context: context,
       builder: (_) => AlertDialog(
-        backgroundColor: AppColors.darkBg1,
+        backgroundColor: const Color(0xFF111111),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         title: Text('Delete Transaction',
-            style: AppTextStyles.headingSmall.copyWith(color: AppColors.lightGrey)),
+            style: AppTextStyles.headingSmall.copyWith(color: Colors.white)),
         content: Text('This action cannot be undone.',
-            style: AppTextStyles.bodyMedium.copyWith(color: AppColors.darkText2)),
+            style: AppTextStyles.bodyMedium.copyWith(color: Colors.white.withValues(alpha: 0.6))),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
             child: Text('Cancel',
-                style: AppTextStyles.labelMedium.copyWith(color: AppColors.darkText2)),
+                style: AppTextStyles.labelMedium.copyWith(color: Colors.white.withValues(alpha: 0.6))),
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, true),
             child: Text('Delete',
                 style: AppTextStyles.labelMedium.copyWith(
-                    color: AppColors.red, fontWeight: FontWeight.w700)),
+                    color: Colors.red, fontWeight: FontWeight.w700)),
           ),
         ],
       ),
@@ -63,26 +63,26 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
     final isLoading = context.watch<TransactionProvider>().isLoading;
 
     return Scaffold(
-      backgroundColor: AppColors.darkBg0,
+      backgroundColor: Colors.black,
       appBar: AppBar(
-        backgroundColor: AppColors.darkBg0,
+        backgroundColor: Colors.black,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_rounded, color: AppColors.lightGrey, size: 18),
+          icon: const Icon(Icons.arrow_back_ios_rounded, color: Colors.white, size: 18),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text('Transaction Detail',
-            style: AppTextStyles.headingSmall.copyWith(color: AppColors.lightGrey)),
+            style: AppTextStyles.headingSmall.copyWith(color: Colors.white)),
         centerTitle: true,
       ),
       body: isLoading || t == null
-          ? const Center(child: CircularProgressIndicator(color: AppColors.green))
+          ? const Center(child: CircularProgressIndicator(color: Colors.white))
           : _buildBody(t, currency),
     );
   }
 
   Widget _buildBody(TransactionModel t, String currency) {
-    final color = t.isTransfer ? AppColors.amber : t.isIncome ? AppColors.green : AppColors.red;
+    final color = t.isTransfer ? Colors.amber : t.isIncome ? Colors.green : Colors.red;
     final sign  = t.isIncome ? '+' : t.isTransfer ? '' : '-';
 
     return Column(
@@ -97,18 +97,18 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
                   padding: const EdgeInsets.all(24),
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
-                      colors: [color.withOpacity(0.15), AppColors.darkBg1],
+                      colors: [color.withValues(alpha: 0.15), const Color(0xFF111111)],
                       begin: Alignment.topCenter, end: Alignment.bottomCenter,
                     ),
                     borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: color.withOpacity(0.3)),
+                    border: Border.all(color: color.withValues(alpha: 0.3)),
                   ),
                   child: Column(
                     children: [
                       Container(
                         width: 60, height: 60,
                         decoration: BoxDecoration(
-                          color: color.withOpacity(0.15),
+                          color: color.withValues(alpha: 0.15),
                           shape: BoxShape.circle,
                         ),
                         child: Center(
@@ -126,14 +126,14 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
                       const SizedBox(height: 6),
                       Text(
                         t.description.isNotEmpty ? t.description : t.displayCategory,
-                        style: AppTextStyles.headingSmall.copyWith(color: AppColors.lightGrey),
+                        style: AppTextStyles.headingSmall.copyWith(color: Colors.white),
                         textAlign: TextAlign.center,
                       ),
                       const SizedBox(height: 8),
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                         decoration: BoxDecoration(
-                          color: color.withOpacity(0.15),
+                          color: color.withValues(alpha: 0.15),
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Text(
@@ -169,15 +169,15 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
                     width: double.infinity,
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      color: AppColors.darkBg1,
+                      color: const Color(0xFF111111),
                       borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: AppColors.darkBorder),
+                      border: Border.all(color: const Color(0x33FFFFFF)),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text('Tags', style: AppTextStyles.labelMedium.copyWith(
-                            color: AppColors.darkText3)),
+                            color: Colors.white.withValues(alpha: 0.6))),
                         const SizedBox(height: 10),
                         Wrap(
                           spacing: 8,
@@ -185,12 +185,12 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
                           children: t.tags.map((tag) => Container(
                             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                             decoration: BoxDecoration(
-                              color: AppColors.forest.withOpacity(0.2),
+                              color: Colors.white.withValues(alpha: 0.1),
                               borderRadius: BorderRadius.circular(20),
-                              border: Border.all(color: AppColors.forest.withOpacity(0.4)),
+                              border: Border.all(color: const Color(0x33FFFFFF)),
                             ),
                             child: Text(tag, style: AppTextStyles.labelSmall.copyWith(
-                                color: AppColors.sage)),
+                                color: Colors.white)),
                           )).toList(),
                         ),
                       ],
@@ -209,9 +209,9 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
   Widget _detailCard(List<_DetailRow> rows) {
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.darkBg1,
+        color: const Color(0xFF111111),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.darkBorder),
+        border: Border.all(color: const Color(0x33FFFFFF)),
       ),
       child: Column(
         children: rows.asMap().entries.map((e) {
@@ -222,19 +222,19 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                 child: Row(
                   children: [
-                    Icon(e.value.icon, color: AppColors.darkText3, size: 18),
+                    Icon(e.value.icon, color: Colors.white.withValues(alpha: 0.6), size: 18),
                     const SizedBox(width: 12),
                     Text(e.value.label,
-                        style: AppTextStyles.bodySmall.copyWith(color: AppColors.darkText3)),
+                        style: AppTextStyles.bodySmall.copyWith(color: Colors.white.withValues(alpha: 0.6))),
                     const Spacer(),
                     Text(e.value.value,
                         style: AppTextStyles.labelMedium.copyWith(
-                            color: AppColors.lightGrey, fontWeight: FontWeight.w600)),
+                            color: Colors.white, fontWeight: FontWeight.w600)),
                   ],
                 ),
               ),
               if (!isLast)
-                Divider(height: 1, color: AppColors.darkBorder, indent: 46),
+                const Divider(height: 1, color: Color(0x33FFFFFF), indent: 46),
             ],
           );
         }).toList(),
@@ -245,9 +245,9 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
   Widget _buildActions(TransactionModel t) {
     return Container(
       padding: const EdgeInsets.fromLTRB(20, 12, 20, 32),
-      decoration: BoxDecoration(
-        color: AppColors.darkBg0,
-        border: Border(top: BorderSide(color: AppColors.darkBorder)),
+      decoration: const BoxDecoration(
+        color: Colors.black,
+        border: Border(top: BorderSide(color: Color(0x33FFFFFF))),
       ),
       child: Row(
         children: [
@@ -257,17 +257,17 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
               child: Container(
                 height: 50,
                 decoration: BoxDecoration(
-                  color: AppColors.red.withOpacity(0.1),
+                  color: Colors.red.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(14),
-                  border: Border.all(color: AppColors.red.withOpacity(0.3)),
+                  border: Border.all(color: Colors.red.withValues(alpha: 0.3)),
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Icon(Icons.delete_outline_rounded, color: AppColors.red, size: 18),
+                    const Icon(Icons.delete_outline_rounded, color: Colors.red, size: 18),
                     const SizedBox(width: 6),
                     Text('Delete', style: AppTextStyles.labelMedium.copyWith(
-                        color: AppColors.red, fontWeight: FontWeight.w700)),
+                        color: Colors.red, fontWeight: FontWeight.w700)),
                   ],
                 ),
               ),

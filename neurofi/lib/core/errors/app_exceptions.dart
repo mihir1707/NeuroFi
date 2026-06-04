@@ -21,7 +21,7 @@ class NotFoundException extends AppException {
 }
 
 class ValidationException extends AppException {
-  ValidationException(String message) : super(message, statusCode: 422);
+  ValidationException(super.message) : super(statusCode: 422);
 }
 
 class ServerException extends AppException {

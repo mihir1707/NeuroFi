@@ -75,7 +75,7 @@ class _TransactionsScreenState extends State<TransactionsScreen>
     final dateKeys   = grouped.keys.toList();
 
     return Scaffold(
-      backgroundColor: AppColors.darkBg0,
+      backgroundColor: Colors.black,
       body: SafeArea(
         child: Column(
           children: [
@@ -89,8 +89,8 @@ class _TransactionsScreenState extends State<TransactionsScreen>
                       ? _buildEmpty()
                       : RefreshIndicator(
                           onRefresh: () => provider.loadTransactions(limit: 50),
-                          color: AppColors.green,
-                          backgroundColor: AppColors.darkBg1,
+                          color: Colors.white,
+                          backgroundColor: const Color(0xFF111111),
                           child: ListView.builder(
                             padding: const EdgeInsets.fromLTRB(20, 8, 20, 100),
                             itemCount: dateKeys.length,
@@ -111,14 +111,14 @@ class _TransactionsScreenState extends State<TransactionsScreen>
                                       children: [
                                         Text(date,
                                             style: AppTextStyles.labelMedium.copyWith(
-                                                color: AppColors.darkText3)),
+                                                color: Colors.white.withValues(alpha: 0.6))),
                                         Text(
                                           CurrencyFormatter.format(dayTotal.abs(), currency,
                                               showSign: true),
                                           style: AppTextStyles.labelMedium.copyWith(
                                             color: dayTotal >= 0
-                                                ? AppColors.green
-                                                : AppColors.red,
+                                                ? Colors.green
+                                                : Colors.red,
                                             fontWeight: FontWeight.w700,
                                           ),
                                         ),
@@ -142,13 +142,27 @@ class _TransactionsScreenState extends State<TransactionsScreen>
   }
 
   Widget _buildHeader() {
+    final bool isPushed = ModalRoute.of(context)?.settings.name == RouteNames.transactions;
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text('Transactions',
-              style: AppTextStyles.headingLarge.copyWith(color: AppColors.lightGrey)),
+          Row(
+            children: [
+              if (isPushed) ...[
+                IconButton(
+                  icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white, size: 20),
+                  onPressed: () => Navigator.pop(context),
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(),
+                ),
+                const SizedBox(width: 12),
+              ],
+              Text('Transactions',
+                  style: AppTextStyles.headingLarge.copyWith(color: Colors.white)),
+            ],
+          ),
           Row(
             children: [
               _iconBtn(Icons.search_rounded,
@@ -170,7 +184,7 @@ class _TransactionsScreenState extends State<TransactionsScreen>
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
         itemCount: _filters.length,
-        separatorBuilder: (_, __) => const SizedBox(width: 8),
+        separatorBuilder: (_, _) => const SizedBox(width: 8),
         itemBuilder: (_, i) {
           final f        = _filters[i];
           final selected = f == _selectedFilter;
@@ -180,16 +194,16 @@ class _TransactionsScreenState extends State<TransactionsScreen>
               duration: const Duration(milliseconds: 200),
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
               decoration: BoxDecoration(
-                color: selected ? AppColors.forest : AppColors.darkBg1,
+                color: selected ? Colors.white : const Color(0xFF111111),
                 borderRadius: BorderRadius.circular(20),
                 border: Border.all(
-                  color: selected ? AppColors.green : AppColors.darkBorder,
+                  color: selected ? Colors.white : const Color(0x33FFFFFF),
                 ),
               ),
               child: Text(
                 f[0].toUpperCase() + f.substring(1),
                 style: AppTextStyles.labelMedium.copyWith(
-                  color: selected ? AppColors.lightGrey : AppColors.darkText2,
+                  color: selected ? Colors.black : Colors.white.withValues(alpha: 0.6),
                   fontWeight: selected ? FontWeight.w700 : FontWeight.w400,
                 ),
               ),
@@ -207,25 +221,25 @@ class _TransactionsScreenState extends State<TransactionsScreen>
         controller: _searchController,
         autofocus: true,
         onChanged: (_) => setState(() {}),
-        style: AppTextStyles.bodyMedium.copyWith(color: AppColors.lightGrey),
+        style: AppTextStyles.bodyMedium.copyWith(color: Colors.white),
         decoration: InputDecoration(
           hintText: 'Search transactions...',
-          hintStyle: AppTextStyles.bodyMedium.copyWith(color: AppColors.darkText3),
+          hintStyle: AppTextStyles.bodyMedium.copyWith(color: Colors.white.withValues(alpha: 0.6)),
           filled: true,
-          fillColor: AppColors.darkBg1,
-          prefixIcon: const Icon(Icons.search_rounded, color: AppColors.darkText3, size: 20),
+          fillColor: const Color(0xFF111111),
+          prefixIcon: Icon(Icons.search_rounded, color: Colors.white.withValues(alpha: 0.6), size: 20),
           suffixIcon: _searchController.text.isNotEmpty
               ? GestureDetector(
                   onTap: () => setState(() => _searchController.clear()),
-                  child: const Icon(Icons.close_rounded, color: AppColors.darkText3, size: 18))
+                  child: Icon(Icons.close_rounded, color: Colors.white.withValues(alpha: 0.6), size: 18))
               : null,
           contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: AppColors.darkBorder)),
+              borderSide: const BorderSide(color: Color(0x33FFFFFF))),
           enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: AppColors.darkBorder)),
+              borderSide: const BorderSide(color: Color(0x33FFFFFF))),
           focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: AppColors.green, width: 1.5)),
+              borderSide: const BorderSide(color: Colors.white, width: 1.5)),
         ),
       ),
     );
@@ -239,10 +253,10 @@ class _TransactionsScreenState extends State<TransactionsScreen>
           const Text('📭', style: TextStyle(fontSize: 56)),
           const SizedBox(height: 16),
           Text('No transactions found',
-              style: AppTextStyles.bodyMedium.copyWith(color: AppColors.darkText2)),
+              style: AppTextStyles.bodyMedium.copyWith(color: Colors.white.withValues(alpha: 0.6))),
           const SizedBox(height: 6),
           Text('Try a different filter or add one',
-              style: AppTextStyles.labelSmall.copyWith(color: AppColors.darkText3)),
+              style: AppTextStyles.labelSmall.copyWith(color: Colors.white.withValues(alpha: 0.4))),
         ],
       ),
     );
@@ -252,11 +266,11 @@ class _TransactionsScreenState extends State<TransactionsScreen>
     return ListView.builder(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
       itemCount: 6,
-      itemBuilder: (_, __) => Container(
+      itemBuilder: (_, _) => Container(
         margin: const EdgeInsets.only(bottom: 12),
         height: 68,
         decoration: BoxDecoration(
-          color: AppColors.darkBg1,
+          color: const Color(0xFF111111),
           borderRadius: BorderRadius.circular(16),
         ),
       ),
@@ -269,11 +283,11 @@ class _TransactionsScreenState extends State<TransactionsScreen>
       child: Container(
         width: 38, height: 38,
         decoration: BoxDecoration(
-          color: AppColors.darkBg1,
+          color: const Color(0xFF111111),
           borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: AppColors.darkBorder),
+          border: Border.all(color: const Color(0x33FFFFFF)),
         ),
-        child: Icon(icon, color: AppColors.darkText2, size: 18),
+        child: Icon(icon, color: Colors.white.withValues(alpha: 0.6), size: 18),
       ),
     );
   }
@@ -286,7 +300,7 @@ class _TxTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = t.isTransfer ? AppColors.amber : t.isIncome ? AppColors.green : AppColors.red;
+    final color = t.isTransfer ? Colors.amber : t.isIncome ? Colors.green : Colors.red;
     final sign  = t.isIncome ? '+' : t.isTransfer ? '' : '-';
 
     return GestureDetector(
@@ -295,16 +309,16 @@ class _TxTile extends StatelessWidget {
         margin: const EdgeInsets.only(bottom: 8),
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
         decoration: BoxDecoration(
-          color: AppColors.darkBg1,
+          color: const Color(0xFF111111),
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: AppColors.darkBorder),
+          border: Border.all(color: const Color(0x33FFFFFF)),
         ),
         child: Row(
           children: [
             Container(
               width: 42, height: 42,
               decoration: BoxDecoration(
-                color: color.withOpacity(0.12),
+                color: color.withValues(alpha: 0.12),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Center(child: Text(_emoji(t.displayCategory), style: const TextStyle(fontSize: 18))),
@@ -317,11 +331,11 @@ class _TxTile extends StatelessWidget {
                   Text(
                     t.description.isNotEmpty ? t.description : t.displayCategory,
                     style: AppTextStyles.bodyMedium.copyWith(
-                        color: AppColors.lightGrey, fontWeight: FontWeight.w600),
+                        color: Colors.white, fontWeight: FontWeight.w600),
                     overflow: TextOverflow.ellipsis,
                   ),
                   Text(DateFormatter.toRelative(t.transactionDate),
-                      style: AppTextStyles.labelSmall.copyWith(color: AppColors.darkText3)),
+                      style: AppTextStyles.labelSmall.copyWith(color: Colors.white.withValues(alpha: 0.6))),
                 ],
               ),
             ),

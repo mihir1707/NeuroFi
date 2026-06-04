@@ -53,17 +53,12 @@ class _HeroBalanceCardState extends State<HeroBalanceCard>
       child: Container(
         width: double.infinity,
         decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            begin:  Alignment.topLeft,
-            end:    Alignment.bottomRight,
-            colors: [AppColors.darkForest, AppColors.forest, AppColors.darkBg1],
-            stops:  [0.0, 0.5, 1.0],
-          ),
+          color:        Colors.black,
           borderRadius: BorderRadius.circular(24),
-          border: Border.all(color: AppColors.forest.withOpacity(0.4)),
+          border:       Border.all(color: const Color(0x26FFFFFF)),
           boxShadow: [
             BoxShadow(
-              color:      AppColors.forest.withOpacity(0.3),
+              color:      Colors.black.withValues(alpha: 0.4),
               blurRadius: 30,
               offset:     const Offset(0, 10),
             ),
@@ -71,30 +66,6 @@ class _HeroBalanceCardState extends State<HeroBalanceCard>
         ),
         child: Stack(
           children: [
-            Positioned(
-              top:   -30,
-              right: -30,
-              child: Container(
-                width:  140,
-                height: 140,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: AppColors.green.withOpacity(0.08),
-                ),
-              ),
-            ),
-            Positioned(
-              bottom: -20,
-              left:   -20,
-              child: Container(
-                width:  100,
-                height: 100,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: AppColors.sage.withOpacity(0.06),
-                ),
-              ),
-            ),
             Padding(
               padding: const EdgeInsets.all(24),
               child: Column(
@@ -106,7 +77,7 @@ class _HeroBalanceCardState extends State<HeroBalanceCard>
                       Text(
                         'Total Balance',
                         style: AppTextStyles.labelMedium.copyWith(
-                          color: AppColors.sage.withOpacity(0.8),
+                          color: Colors.white.withValues(alpha: 0.6),
                         ),
                       ),
                       GestureDetector(
@@ -115,7 +86,7 @@ class _HeroBalanceCardState extends State<HeroBalanceCard>
                           _balanceVisible
                               ? Icons.visibility_outlined
                               : Icons.visibility_off_outlined,
-                          color: AppColors.sage.withOpacity(0.7),
+                          color: Colors.white,
                           size:  20,
                         ),
                       ),
@@ -126,7 +97,7 @@ class _HeroBalanceCardState extends State<HeroBalanceCard>
                       ? Text(
                           CurrencyFormatter.format(totalBalance, currency),
                           style: AppTextStyles.displayLarge.copyWith(
-                            color:      AppColors.lightGrey,
+                            color:      Colors.white,
                             fontWeight: FontWeight.w800,
                             fontSize:   36,
                           ),
@@ -134,7 +105,7 @@ class _HeroBalanceCardState extends State<HeroBalanceCard>
                       : Text(
                           '••••••',
                           style: AppTextStyles.displayLarge.copyWith(
-                            color:    AppColors.lightGrey,
+                            color:    Colors.white,
                             fontSize: 36,
                           ),
                         ),
@@ -142,7 +113,7 @@ class _HeroBalanceCardState extends State<HeroBalanceCard>
                   Text(
                     '${accounts.length} account${accounts.length != 1 ? 's' : ''}',
                     style: AppTextStyles.labelSmall.copyWith(
-                      color: AppColors.sage.withOpacity(0.6),
+                      color: Colors.white.withValues(alpha: 0.4),
                     ),
                   ),
                   const SizedBox(height: 24),
@@ -153,7 +124,7 @@ class _HeroBalanceCardState extends State<HeroBalanceCard>
                           label:  'Income',
                           value:  CurrencyFormatter.format(totalIncome, currency),
                           icon:   Icons.arrow_downward_rounded,
-                          color:  AppColors.green,
+                          color:  Colors.green,
                           visible: _balanceVisible,
                         ),
                       ),
@@ -188,9 +159,9 @@ class _HeroBalanceCardState extends State<HeroBalanceCard>
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
       decoration: BoxDecoration(
-        color:        Colors.black.withOpacity(0.2),
+        color:        Colors.white.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(14),
-        border:       Border.all(color: color.withOpacity(0.25)),
+        border:       Border.all(color: color.withValues(alpha: 0.3)),
       ),
       child: Row(
         children: [
@@ -198,7 +169,7 @@ class _HeroBalanceCardState extends State<HeroBalanceCard>
             width:  28,
             height: 28,
             decoration: BoxDecoration(
-              color:        color.withOpacity(0.15),
+              color:        color.withValues(alpha: 0.15),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Icon(icon, color: color, size: 14),
@@ -211,13 +182,13 @@ class _HeroBalanceCardState extends State<HeroBalanceCard>
                 Text(
                   label,
                   style: AppTextStyles.labelSmall.copyWith(
-                    color: AppColors.darkText2,
+                    color: Colors.white.withValues(alpha: 0.5),
                   ),
                 ),
                 Text(
                   visible ? value : '••••',
                   style: AppTextStyles.labelMedium.copyWith(
-                    color:      AppColors.lightGrey,
+                    color:      Colors.white,
                     fontWeight: FontWeight.w700,
                   ),
                   overflow: TextOverflow.ellipsis,

@@ -12,12 +12,20 @@ class EditProfileScreen extends StatefulWidget {
 }
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
-  final _nameController    = TextEditingController();
-  final _phoneController   = TextEditingController();
-  final _budgetController  = TextEditingController();
-  String _currency         = 'INR';
-  bool _notificationsEnabled = true;
-  bool _aiInsightsEnabled    = true;
+  final _formKey          = GlobalKey<FormState>();
+  final _nameController   = TextEditingController();
+  final _phoneController  = TextEditingController();
+  final _budgetController = TextEditingController();
+
+  String _currency           = 'INR';
+  bool   _notificationsEnabled = true;
+  bool   _aiInsightsEnabled    = true;
+  bool   _isLoading            = false;
+
+  static const _currencyFlags = {
+    'INR': '🇮🇳', 'USD': '🇺🇸', 'EUR': '🇪🇺', 'GBP': '🇬🇧',
+    'AED': '🇦🇪', 'SGD': '🇸🇬', 'JPY': '🇯🇵', 'CAD': '🇨🇦', 'AUD': '🇦🇺',
+  };
 
   @override
   void initState() {
@@ -26,7 +34,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     if (user != null) {
       _nameController.text   = user.name;
       _phoneController.text  = user.phone;
-      _budgetController.text = user.monthlyBudget > 0 ? user.monthlyBudget.toStringAsFixed(0) : '';
+      _budgetController.text =
+          user.monthlyBudget > 0 ? user.monthlyBudget.toStringAsFixed(0) : '';
       _currency              = user.currency;
       _notificationsEnabled  = user.notificationsEnabled;
       _aiInsightsEnabled     = user.aiInsightsEnabled;
@@ -42,8 +51,15 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   }
 
   Future<void> _save() async {
+    if (!_formKey.currentState!.validate()) return;
+    FocusScope.of(context).unfocus();
+
+    setState(() => _isLoading = true);
+    await Future.delayed(const Duration(milliseconds: 400));
+
     final user = context.read<AuthProvider>().user;
-    if (user == null) return;
+    if (user == null) { setState(() => _isLoading = false); return; }
+
     final updated = user.copyWith(
       name:                 _nameController.text.trim(),
       phone:                _phoneController.text.trim(),
@@ -53,31 +69,87 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       aiInsightsEnabled:    _aiInsightsEnabled,
     );
     context.read<AuthProvider>().updateLocalUser(updated);
-    if (mounted) Navigator.pop(context);
+
+    setState(() => _isLoading = false);
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text('Profile updated successfully'),
+          backgroundColor: AppColors.green,
+          behavior: SnackBarBehavior.floating,
+          margin: const EdgeInsets.all(16),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        ),
+      );
+      Navigator.pop(context);
+    }
   }
 
-  InputDecoration get _inputDec => InputDecoration(
-    filled: true,
-    fillColor: AppColors.darkBg1,
-    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12),
-        borderSide: const BorderSide(color: AppColors.darkBorder)),
-    enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12),
-        borderSide: const BorderSide(color: AppColors.darkBorder)),
-    focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12),
-        borderSide: const BorderSide(color: AppColors.green, width: 1.5)),
-    labelStyle: AppTextStyles.bodySmall.copyWith(color: AppColors.darkText3),
-  );
+  // ── Login-style input decoration ────────────────────────────────────
+  InputDecoration _buildDecoration({
+    required String label,
+    required String hint,
+    required IconData icon,
+    Widget? suffix,
+  }) {
+    return InputDecoration(
+      labelText: label,
+      labelStyle: AppTextStyles.labelMedium.copyWith(
+        color: const Color.fromARGB(255, 133, 130, 130),
+      ),
+      floatingLabelStyle: AppTextStyles.labelMedium.copyWith(
+        color: Colors.white,
+        fontSize: 18,
+      ),
+      hintText: hint,
+      hintStyle: AppTextStyles.bodyMedium.copyWith(
+        color: const Color.fromARGB(255, 133, 130, 130),
+      ),
+      filled: true,
+      fillColor: Colors.black,
+      prefixIcon: Icon(icon,
+          color: const Color.fromARGB(255, 209, 205, 205), size: 20),
+      suffixIcon: suffix,
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(14),
+        borderSide:
+            const BorderSide(color: Color.fromARGB(255, 209, 205, 205)),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(14),
+        borderSide:
+            const BorderSide(color: Color.fromARGB(255, 233, 226, 226)),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(14),
+        borderSide: const BorderSide(color: Colors.white),
+      ),
+      errorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(14),
+        borderSide:
+            const BorderSide(color: Color.fromARGB(255, 223, 193, 193)),
+      ),
+      focusedErrorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(14),
+        borderSide: const BorderSide(color: Colors.white, width: 1.5),
+      ),
+      errorStyle: AppTextStyles.labelSmall.copyWith(
+        color: const Color.fromARGB(255, 223, 193, 193),
+      ),
+    );
+  }
 
-  static const _currencyFlags = {
-    'INR': '🇮🇳', 'USD': '🇺🇸', 'EUR': '🇪🇺', 'GBP': '🇬🇧',
-    'AED': '🇦🇪', 'SGD': '🇸🇬', 'JPY': '🇯🇵', 'CAD': '🇨🇦', 'AUD': '🇦🇺',
-  };
-
+  // ── Build ────────────────────────────────────────────────────────────
   @override
   Widget build(BuildContext context) {
-    final user     = context.watch<AuthProvider>().user;
-    final initials = (user?.name ?? 'U').trim().split(' ')
-        .take(2).map((w) => w.isNotEmpty ? w[0].toUpperCase() : '').join();
+    final user = context.watch<AuthProvider>().user;
+    final initials = (user?.name ?? 'U')
+        .trim()
+        .split(' ')
+        .take(2)
+        .map((w) => w.isNotEmpty ? w[0].toUpperCase() : '')
+        .join();
 
     return Scaffold(
       backgroundColor: AppColors.darkBg0,
@@ -85,128 +157,295 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         backgroundColor: AppColors.darkBg0,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_rounded, color: AppColors.lightGrey, size: 18),
+          icon: const Icon(Icons.arrow_back_ios_rounded,
+              color: Colors.white, size: 18),
           onPressed: () => Navigator.pop(context),
         ),
-        title: Text('Edit Profile',
-            style: AppTextStyles.headingSmall.copyWith(color: AppColors.lightGrey)),
+        title: Text(
+          'Edit Profile',
+          style: AppTextStyles.headingSmall.copyWith(color: Colors.white),
+        ),
         centerTitle: true,
-        actions: [
-          TextButton(
-            onPressed: _save,
-            child: Text('Save',
-                style: AppTextStyles.labelMedium.copyWith(
-                    color: AppColors.sage, fontWeight: FontWeight.w700)),
-          ),
-        ],
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          children: [
-            Container(
-              width: 80, height: 80,
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(colors: [AppColors.forest, AppColors.green],
-                    begin: Alignment.topLeft, end: Alignment.bottomRight),
-                shape: BoxShape.circle,
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // ── Avatar ──────────────────────────────────────────────
+              Center(
+                child: Stack(
+                  children: [
+                    Container(
+                      width: 88,
+                      height: 88,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF111111),
+                        shape: BoxShape.circle,
+                        border: Border.all(color: const Color(0x40FFFFFF), width: 2),
+                        boxShadow: [
+                          BoxShadow(
+                              color: Colors.white.withValues(alpha: 0.06),
+                              blurRadius: 20,
+                              offset: const Offset(0, 6)),
+                        ],
+                      ),
+                      child: Center(
+                        child: Text(
+                          initials,
+                          style: AppTextStyles.displayMedium.copyWith(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 0, right: 0,
+                      child: Container(
+                        width: 28, height: 28,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          shape: BoxShape.circle,
+                          border: Border.all(color: AppColors.darkBg0, width: 2),
+                        ),
+                        child: const Icon(Icons.edit,
+                            color: AppColors.darkBg0, size: 14),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-              child: Center(child: Text(initials,
-                  style: AppTextStyles.displayMedium.copyWith(
-                      color: AppColors.lightGrey, fontWeight: FontWeight.w700))),
-            ),
-            const SizedBox(height: 24),
-            TextField(
-              controller: _nameController,
-              style: AppTextStyles.bodyMedium.copyWith(color: AppColors.lightGrey),
-              decoration: _inputDec.copyWith(
-                labelText: 'Full Name',
-                prefixIcon: const Icon(Icons.person_outline_rounded, color: AppColors.darkText3, size: 18),
+
+              const SizedBox(height: 32),
+
+              // ── Full Name ───────────────────────────────────────────
+              TextFormField(
+                controller: _nameController,
+                textInputAction: TextInputAction.next,
+                style: AppTextStyles.bodyMedium.copyWith(
+                    color: const Color.fromRGBO(245, 247, 250, 1)),
+                validator: (v) {
+                  if (v == null || v.trim().isEmpty) return 'Name is required';
+                  if (v.trim().length < 2) return 'Name must be at least 2 characters';
+                  return null;
+                },
+                decoration: _buildDecoration(
+                  label: 'Full Name',
+                  hint: 'Enter your full name',
+                  icon: Icons.person_outline_rounded,
+                ),
               ),
-            ),
-            const SizedBox(height: 12),
-            TextField(
-              controller: _phoneController,
-              keyboardType: TextInputType.phone,
-              style: AppTextStyles.bodyMedium.copyWith(color: AppColors.lightGrey),
-              decoration: _inputDec.copyWith(
-                labelText: 'Phone (optional)',
-                prefixIcon: const Icon(Icons.phone_outlined, color: AppColors.darkText3, size: 18),
+
+              const SizedBox(height: 16),
+
+              // ── Phone ───────────────────────────────────────────────
+              TextFormField(
+                controller: _phoneController,
+                keyboardType: TextInputType.phone,
+                textInputAction: TextInputAction.next,
+                style: AppTextStyles.bodyMedium.copyWith(
+                    color: const Color.fromRGBO(245, 247, 250, 1)),
+                decoration: _buildDecoration(
+                  label: 'Phone (optional)',
+                  hint: '+91 98765 43210',
+                  icon: Icons.phone_outlined,
+                ),
               ),
-            ),
-            const SizedBox(height: 12),
-            TextField(
-              controller: _budgetController,
-              keyboardType: const TextInputType.numberWithOptions(decimal: true),
-              style: AppTextStyles.bodyMedium.copyWith(color: AppColors.lightGrey),
-              decoration: _inputDec.copyWith(
-                labelText: 'Monthly Budget',
-                prefixIcon: const Icon(Icons.account_balance_wallet_outlined, color: AppColors.darkText3, size: 18),
+
+              const SizedBox(height: 16),
+
+              // ── Monthly Budget ──────────────────────────────────────
+              TextFormField(
+                controller: _budgetController,
+                keyboardType:
+                    const TextInputType.numberWithOptions(decimal: true),
+                textInputAction: TextInputAction.done,
+                style: AppTextStyles.bodyMedium.copyWith(
+                    color: const Color.fromRGBO(245, 247, 250, 1)),
+                decoration: _buildDecoration(
+                  label: 'Monthly Budget',
+                  hint: '0.00',
+                  icon: Icons.account_balance_wallet_outlined,
+                ),
               ),
-            ),
-            const SizedBox(height: 12),
-            DropdownButtonFormField<String>(
-              value: _currency,
-              decoration: _inputDec.copyWith(labelText: 'Default Currency'),
-              dropdownColor: AppColors.darkBg1,
-              style: AppTextStyles.bodyMedium.copyWith(color: AppColors.lightGrey),
-              items: AppConstants.currencies.map((c) => DropdownMenuItem(
-                value: c,
-                child: Row(children: [
-                  Text(_currencyFlags[c] ?? '🌍', style: const TextStyle(fontSize: 18)),
-                  const SizedBox(width: 8),
-                  Text(c),
-                ]),
-              )).toList(),
-              onChanged: (v) => setState(() => _currency = v ?? 'INR'),
-            ),
-            const SizedBox(height: 24),
-            _switchTile('Notifications', 'Receive budget and spending alerts',
-                Icons.notifications_outlined, _notificationsEnabled,
-                (v) => setState(() => _notificationsEnabled = v)),
-            const SizedBox(height: 10),
-            _switchTile('AI Insights', 'Get personalized spending insights',
-                Icons.auto_awesome_outlined, _aiInsightsEnabled,
-                (v) => setState(() => _aiInsightsEnabled = v)),
-            const SizedBox(height: 40),
-          ],
+
+              const SizedBox(height: 16),
+
+              // ── Currency Dropdown ───────────────────────────────────
+              DropdownButtonFormField<String>(
+                value: _currency,
+                decoration: _buildDecoration(
+                  label: 'Default Currency',
+                  hint: '',
+                  icon: Icons.currency_exchange_rounded,
+                ),
+                dropdownColor: const Color(0xFF0B1E2D),
+                style: AppTextStyles.bodyMedium.copyWith(
+                    color: const Color.fromRGBO(245, 247, 250, 1)),
+                iconEnabledColor: const Color.fromARGB(255, 209, 205, 205),
+                items: AppConstants.currencies
+                    .map((c) => DropdownMenuItem(
+                          value: c,
+                          child: Row(children: [
+                            Text(_currencyFlags[c] ?? '🌍',
+                                style: const TextStyle(fontSize: 18)),
+                            const SizedBox(width: 8),
+                            Text(c),
+                          ]),
+                        ))
+                    .toList(),
+                onChanged: (v) => setState(() => _currency = v ?? 'INR'),
+              ),
+
+              const SizedBox(height: 28),
+
+              // ── Section label ────────────────────────────────────────
+              Text(
+                'Preferences',
+                style: AppTextStyles.labelMedium.copyWith(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 0.5,
+                ),
+              ),
+
+              const SizedBox(height: 12),
+
+              // ── Notification toggle ──────────────────────────────────
+              _switchTile(
+                title: 'Notifications',
+                subtitle: 'Receive budget and spending alerts',
+                icon: Icons.notifications_outlined,
+                value: _notificationsEnabled,
+                onChanged: (v) => setState(() => _notificationsEnabled = v),
+              ),
+
+              const SizedBox(height: 10),
+
+              // ── AI Insights toggle ───────────────────────────────────
+              _switchTile(
+                title: 'AI Insights',
+                subtitle: 'Get personalized spending insights',
+                icon: Icons.auto_awesome_outlined,
+                value: _aiInsightsEnabled,
+                onChanged: (v) => setState(() => _aiInsightsEnabled = v),
+              ),
+
+              const SizedBox(height: 36),
+
+              // ── Save button (login-style) ────────────────────────────
+              GestureDetector(
+                onTap: _isLoading ? null : _save,
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 200),
+                  width: double.infinity,
+                  height: 54,
+                  decoration: BoxDecoration(
+                    color: Colors.transparent,
+                    borderRadius: BorderRadius.circular(14),
+                    border: Border.all(color: Colors.white, width: 1.5),
+                    boxShadow: _isLoading
+                        ? []
+                        : [
+                            BoxShadow(
+                              color: const Color.fromARGB(255, 22, 22, 22),
+                              blurRadius: 20,
+                              offset: const Offset(0, 8),
+                            ),
+                          ],
+                  ),
+                  child: Center(
+                    child: _isLoading
+                        ? const SizedBox(
+                            width: 22,
+                            height: 22,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2.5,
+                              color: Color.fromRGBO(245, 247, 250, 1),
+                            ),
+                          )
+                        : Text(
+                            'Save Changes',
+                            style: AppTextStyles.buttonText.copyWith(
+                              color: const Color.fromRGBO(245, 247, 250, 1),
+                              decorationColor: Colors.white,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 16,
+                            ),
+                          ),
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 24),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  Widget _switchTile(String title, String subtitle, IconData icon, bool value,
-      ValueChanged<bool> onChanged) {
+  // ── Switch tile ──────────────────────────────────────────────────────
+  Widget _switchTile({
+    required String title,
+    required String subtitle,
+    required IconData icon,
+    required bool value,
+    required ValueChanged<bool> onChanged,
+  }) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.darkBg1,
+        color: Colors.black,
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: AppColors.darkBorder),
+        border: Border.all(
+            color: const Color.fromARGB(255, 233, 226, 226), width: 1),
       ),
       child: Row(
         children: [
           Container(
-            width: 36, height: 36,
+            width: 38,
+            height: 38,
             decoration: BoxDecoration(
-              color: AppColors.forest.withOpacity(0.15),
+              color: Colors.white10,
               borderRadius: BorderRadius.circular(10),
             ),
-            child: Icon(icon, color: AppColors.sage, size: 18),
+            child: Icon(icon,
+                color: const Color.fromARGB(255, 209, 205, 205), size: 18),
           ),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title, style: AppTextStyles.bodyMedium.copyWith(
-                    color: AppColors.lightGrey, fontWeight: FontWeight.w600)),
-                Text(subtitle, style: AppTextStyles.labelSmall.copyWith(
-                    color: AppColors.darkText3)),
+                Text(
+                  title,
+                  style: AppTextStyles.bodyMedium.copyWith(
+                    color: const Color.fromRGBO(245, 247, 250, 1),
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  subtitle,
+                  style: AppTextStyles.labelSmall.copyWith(
+                    color: const Color.fromARGB(255, 133, 130, 130),
+                  ),
+                ),
               ],
             ),
           ),
-          Switch(value: value, activeColor: AppColors.green, onChanged: onChanged),
+          Switch(
+            value: value,
+            onChanged: onChanged,
+            activeColor: Colors.white,
+            activeTrackColor: AppColors.green,
+            inactiveThumbColor: const Color.fromARGB(255, 133, 130, 130),
+            inactiveTrackColor: Colors.white10,
+          ),
         ],
       ),
     );

@@ -42,9 +42,8 @@ class _AiInsightSectionState extends State<AiInsightSection> {
                     width:  30,
                     height: 30,
                     decoration: BoxDecoration(
-                      gradient: const LinearGradient(
-                        colors: [AppColors.amber, AppColors.peach],
-                      ),
+                      color: const Color(0xFF111111),
+                      border: Border.all(color: const Color(0x33FFFFFF)),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: const Center(
@@ -55,7 +54,7 @@ class _AiInsightSectionState extends State<AiInsightSection> {
                   Text(
                     'AI Insights',
                     style: AppTextStyles.headingSmall.copyWith(
-                      color: AppColors.lightGrey,
+                      color: Colors.white,
                     ),
                   ),
                 ],
@@ -65,7 +64,7 @@ class _AiInsightSectionState extends State<AiInsightSection> {
                 child: Text(
                   'View all',
                   style: AppTextStyles.labelMedium.copyWith(
-                    color: AppColors.sage,
+                    color: Colors.white,
                   ),
                 ),
               ),
@@ -112,17 +111,10 @@ class _AiInsightSectionState extends State<AiInsightSection> {
       margin:  const EdgeInsets.only(bottom: 10),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color:        AppColors.darkBg1,
+        color:        const Color(0xFF111111),
         borderRadius: BorderRadius.circular(16),
-        border:       Border.all(color: color.withOpacity(0.25)),
-        gradient: LinearGradient(
-          begin:  Alignment.topLeft,
-          end:    Alignment.bottomRight,
-          colors: [
-            AppColors.darkBg1,
-            color.withOpacity(0.05),
-          ],
-        ),
+        border:       Border.all(color: const Color(0x33FFFFFF)),
+
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -131,7 +123,7 @@ class _AiInsightSectionState extends State<AiInsightSection> {
             width:  38,
             height: 38,
             decoration: BoxDecoration(
-              color:        color.withOpacity(0.15),
+              color:        const Color(0x1AFFFFFF),
               borderRadius: BorderRadius.circular(10),
             ),
             child: Center(
@@ -146,7 +138,7 @@ class _AiInsightSectionState extends State<AiInsightSection> {
                 Text(
                   title,
                   style: AppTextStyles.labelMedium.copyWith(
-                    color:      AppColors.lightGrey,
+                    color:      Colors.white,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
@@ -154,7 +146,7 @@ class _AiInsightSectionState extends State<AiInsightSection> {
                 Text(
                   message,
                   style: AppTextStyles.bodySmall.copyWith(
-                    color:  AppColors.darkText2,
+                    color:  Colors.white.withValues(alpha: 0.6),
                     height: 1.5,
                   ),
                 ),
@@ -171,7 +163,7 @@ class _AiInsightSectionState extends State<AiInsightSection> {
       height:  80,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color:        AppColors.darkBg1,
+        color:        const Color(0xFF111111),
         borderRadius: BorderRadius.circular(16),
       ),
       child: Row(
@@ -180,7 +172,7 @@ class _AiInsightSectionState extends State<AiInsightSection> {
             width:  38,
             height: 38,
             decoration: BoxDecoration(
-              color:        AppColors.darkBg2,
+              color:        const Color(0xFF222222),
               borderRadius: BorderRadius.circular(10),
             ),
           ),
@@ -194,7 +186,7 @@ class _AiInsightSectionState extends State<AiInsightSection> {
                   height:       12,
                   width:        120,
                   decoration: BoxDecoration(
-                    color:        AppColors.darkBg2,
+                    color:        const Color(0xFF222222),
                     borderRadius: BorderRadius.circular(6),
                   ),
                 ),
@@ -202,7 +194,7 @@ class _AiInsightSectionState extends State<AiInsightSection> {
                 Container(
                   height:       10,
                   decoration: BoxDecoration(
-                    color:        AppColors.darkBg2,
+                    color:        const Color(0xFF222222),
                     borderRadius: BorderRadius.circular(6),
                   ),
                 ),

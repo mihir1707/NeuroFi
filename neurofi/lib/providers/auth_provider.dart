@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../core/errors/error_handler.dart';
 import '../models/user_model.dart';
 import '../services/auth_service.dart';
 
@@ -60,7 +61,7 @@ class AuthProvider extends ChangeNotifier {
       notifyListeners();
       return true;
     } catch (e) {
-      _setError(e.toString());
+      _setError(ErrorHandler.toUserMessage(e));
       return false;
     } finally {
       _setLoading(false);
@@ -79,7 +80,7 @@ class AuthProvider extends ChangeNotifier {
       return true;
     } catch (e) {
       print('[Auth] Login error: $e');
-      _setError(e.toString());
+      _setError(ErrorHandler.toUserMessage(e));
       return false;
     } finally {
       _setLoading(false);

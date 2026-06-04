@@ -9,14 +9,14 @@ class SpendingDonutChart extends StatelessWidget {
   const SpendingDonutChart({super.key});
 
   static const _categoryColors = [
-    AppColors.green,
-    AppColors.amber,
-    AppColors.salmon,
-    AppColors.sage,
-    AppColors.peach,
-    AppColors.pink,
-    AppColors.yellow,
-    AppColors.forest,
+    Color(0xFF3B82F6), // Blue
+    Color(0xFF10B981), // Green
+    Color(0xFFF59E0B), // Amber
+    Color(0xFFEF4444), // Red
+    Color(0xFF8B5CF6), // Purple
+    Color(0xFFEC4899), // Pink
+    Color(0xFF06B6D4), // Cyan
+    Color(0xFFF97316), // Orange
   ];
 
   @override
@@ -43,16 +43,16 @@ class SpendingDonutChart extends StatelessWidget {
       child: Container(
         padding:    const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color:        AppColors.darkBg1,
+          color:        const Color(0xFF111111),
           borderRadius: BorderRadius.circular(20),
-          border:       Border.all(color: AppColors.darkBorder),
+          border:       Border.all(color: const Color(0x33FFFFFF)),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               'Spending by Category',
-              style: AppTextStyles.headingSmall.copyWith(color: AppColors.lightGrey),
+              style: AppTextStyles.headingSmall.copyWith(color: Colors.white),
             ),
             const SizedBox(height: 20),
             top.isEmpty
@@ -102,7 +102,7 @@ class SpendingDonutChart extends StatelessWidget {
                                     child: Text(
                                       e.value.key,
                                       style: AppTextStyles.labelSmall.copyWith(
-                                        color: AppColors.darkText2,
+                                        color: Colors.white.withValues(alpha: 0.6),
                                       ),
                                       overflow: TextOverflow.ellipsis,
                                     ),
@@ -110,7 +110,7 @@ class SpendingDonutChart extends StatelessWidget {
                                   Text(
                                     '$pct%',
                                     style: AppTextStyles.labelSmall.copyWith(
-                                      color:      AppColors.lightGrey,
+                                      color:      Colors.white,
                                       fontWeight: FontWeight.w700,
                                     ),
                                   ),
@@ -134,7 +134,7 @@ class SpendingDonutChart extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 20),
         child: Text(
           'No expense data yet',
-          style: AppTextStyles.bodySmall.copyWith(color: AppColors.darkText3),
+          style: AppTextStyles.bodySmall.copyWith(color: Colors.white.withValues(alpha: 0.6)),
         ),
       ),
     );
@@ -179,7 +179,7 @@ class _DonutPainter extends CustomPainter {
     }
 
     final centerPaint = Paint()
-      ..color = AppColors.darkBg1
+      ..color = const Color(0xFF111111)
       ..style = PaintingStyle.fill;
     canvas.drawCircle(Offset(cx, cy), radius - stroke, centerPaint);
   }

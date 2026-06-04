@@ -36,25 +36,25 @@ class _AccountDetailScreenState extends State<AccountDetailScreen> {
     final isLoading  = acProvider.isLoading;
 
     return Scaffold(
-      backgroundColor: AppColors.darkBg0,
+      backgroundColor: Colors.black,
       appBar: AppBar(
-        backgroundColor: AppColors.darkBg0, elevation: 0,
+        backgroundColor: Colors.black, elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_rounded, color: AppColors.lightGrey, size: 18),
+          icon: const Icon(Icons.arrow_back_ios_rounded, color: Colors.white, size: 18),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(account?.name ?? 'Account',
-            style: AppTextStyles.headingSmall.copyWith(color: AppColors.lightGrey)),
+            style: AppTextStyles.headingSmall.copyWith(color: Colors.white)),
         centerTitle: true,
       ),
       body: isLoading || account == null
-          ? const Center(child: CircularProgressIndicator(color: AppColors.green))
+          ? const Center(child: CircularProgressIndicator(color: Colors.white))
           : RefreshIndicator(
               onRefresh: () async {
                 await acProvider.loadAccountById(widget.accountId);
                 txProvider.setFilter(accountId: widget.accountId);
               },
-              color: AppColors.green, backgroundColor: AppColors.darkBg1,
+              color: Colors.white, backgroundColor: const Color(0xFF111111),
               child: CustomScrollView(
                 physics: const AlwaysScrollableScrollPhysics(),
                 slivers: [
@@ -65,7 +65,7 @@ class _AccountDetailScreenState extends State<AccountDetailScreen> {
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       sliver: SliverToBoxAdapter(
                         child: Text('Recent Transactions',
-                            style: AppTextStyles.headingSmall.copyWith(color: AppColors.lightGrey)),
+                            style: AppTextStyles.headingSmall.copyWith(color: Colors.white)),
                       ),
                     ),
                   const SliverToBoxAdapter(child: SizedBox(height: 12)),
@@ -73,21 +73,21 @@ class _AccountDetailScreenState extends State<AccountDetailScreen> {
                     delegate: SliverChildBuilderDelegate(
                       (_, i) {
                         final t     = txns[i];
-                        final color = t.isIncome ? AppColors.green : AppColors.red;
+                        final color = t.isIncome ? Colors.green : Colors.red;
                         final sign  = t.isIncome ? '+' : '-';
                         return Container(
                           margin: const EdgeInsets.fromLTRB(20, 0, 20, 8),
                           padding: const EdgeInsets.all(14),
                           decoration: BoxDecoration(
-                            color: AppColors.darkBg1,
+                            color: const Color(0xFF111111),
                             borderRadius: BorderRadius.circular(14),
-                            border: Border.all(color: AppColors.darkBorder),
+                            border: Border.all(color: const Color(0x33FFFFFF)),
                           ),
                           child: Row(children: [
                             Container(
                               width: 40, height: 40,
                               decoration: BoxDecoration(
-                                color: color.withOpacity(0.12),
+                                color: color.withValues(alpha: 0.12),
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               child: Center(child: Text(
@@ -100,10 +100,10 @@ class _AccountDetailScreenState extends State<AccountDetailScreen> {
                               child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                                 Text(t.description.isNotEmpty ? t.description : t.displayCategory,
                                     style: AppTextStyles.bodyMedium.copyWith(
-                                        color: AppColors.lightGrey, fontWeight: FontWeight.w600),
+                                        color: Colors.white, fontWeight: FontWeight.w600),
                                     overflow: TextOverflow.ellipsis),
                                 Text(DateFormatter.toRelative(t.transactionDate),
-                                    style: AppTextStyles.labelSmall.copyWith(color: AppColors.darkText3)),
+                                    style: AppTextStyles.labelSmall.copyWith(color: Colors.white.withValues(alpha: 0.6))),
                               ]),
                             ),
                             Text('$sign${CurrencyFormatter.format(t.amount, currency)}',
@@ -123,18 +123,17 @@ class _AccountDetailScreenState extends State<AccountDetailScreen> {
   }
 
   Widget _buildHeroCard(AccountModel account, String currency) {
-    final color = account.balance >= 0 ? AppColors.green : AppColors.red;
+    final color = account.balance >= 0 ? Colors.green : Colors.red;
     return Padding(
       padding: const EdgeInsets.all(20),
       child: Container(
         padding: const EdgeInsets.all(24),
         decoration: BoxDecoration(
-          gradient: const LinearGradient(
-              colors: [AppColors.darkForest, AppColors.forest],
-              begin: Alignment.topLeft, end: Alignment.bottomRight),
+          color: const Color(0xFF111111),
           borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: const Color(0x33FFFFFF)),
           boxShadow: [BoxShadow(
-              color: AppColors.forest.withOpacity(0.3),
+              color: Colors.black.withValues(alpha: 0.4),
               blurRadius: 20, offset: const Offset(0, 8))],
         ),
         child: Column(
@@ -144,7 +143,7 @@ class _AccountDetailScreenState extends State<AccountDetailScreen> {
               Container(
                 width: 48, height: 48,
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.1),
+                  color: Colors.white.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(13),
                 ),
                 child: Center(child: Text(account.icon, style: const TextStyle(fontSize: 24))),
@@ -152,24 +151,24 @@ class _AccountDetailScreenState extends State<AccountDetailScreen> {
               const SizedBox(width: 12),
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                 Text(account.name,
-                    style: AppTextStyles.headingSmall.copyWith(color: AppColors.lightGrey)),
+                    style: AppTextStyles.headingSmall.copyWith(color: Colors.white)),
                 Text(account.typeLabel,
-                    style: AppTextStyles.labelSmall.copyWith(color: AppColors.sage)),
+                    style: AppTextStyles.labelSmall.copyWith(color: Colors.white.withValues(alpha: 0.6))),
               ]),
             ]),
             const SizedBox(height: 20),
-            Text('Balance', style: AppTextStyles.labelSmall.copyWith(color: AppColors.sage.withOpacity(0.7))),
+            Text('Balance', style: AppTextStyles.labelSmall.copyWith(color: Colors.white.withValues(alpha: 0.6))),
             Text(CurrencyFormatter.format(account.balance.abs(), currency),
                 style: AppTextStyles.displayMedium.copyWith(color: color, fontWeight: FontWeight.w800)),
             if (account.accountNumberLast4.isNotEmpty) ...[
               const SizedBox(height: 8),
               Text('•••• •••• •••• ${account.accountNumberLast4}',
-                  style: AppTextStyles.labelMedium.copyWith(color: AppColors.sage.withOpacity(0.6))),
+                  style: AppTextStyles.labelMedium.copyWith(color: Colors.white.withValues(alpha: 0.4))),
             ],
             if (account.institution.isNotEmpty) ...[
               const SizedBox(height: 4),
               Text(account.institution,
-                  style: AppTextStyles.labelSmall.copyWith(color: AppColors.sage.withOpacity(0.5))),
+                  style: AppTextStyles.labelSmall.copyWith(color: Colors.white.withValues(alpha: 0.4))),
             ],
           ],
         ),

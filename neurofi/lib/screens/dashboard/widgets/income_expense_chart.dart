@@ -4,7 +4,6 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../../../providers/transaction_provider.dart';
 import '../../../providers/auth_provider.dart';
-import '../../../core/utils/currency_formatter.dart';
 
 class IncomeExpenseChart extends StatelessWidget {
   const IncomeExpenseChart({super.key});
@@ -47,9 +46,9 @@ class IncomeExpenseChart extends StatelessWidget {
       child: Container(
         padding:     const EdgeInsets.all(20),
         decoration:  BoxDecoration(
-          color:        AppColors.darkBg1,
+          color:        const Color(0xFF111111),
           borderRadius: BorderRadius.circular(20),
-          border:       Border.all(color: AppColors.darkBorder),
+          border:       Border.all(color: const Color(0x33FFFFFF)),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -60,14 +59,14 @@ class IncomeExpenseChart extends StatelessWidget {
                 Text(
                   'Income vs Expense',
                   style: AppTextStyles.headingSmall.copyWith(
-                    color: AppColors.lightGrey,
+                    color: Colors.white,
                   ),
                 ),
                 Row(
                   children: [
-                    _legend(AppColors.green, 'Income'),
+                    _legend(Colors.green, 'Income'),
                     const SizedBox(width: 12),
-                    _legend(AppColors.red, 'Expense'),
+                    _legend(Colors.red, 'Expense'),
                   ],
                 ),
               ],
@@ -101,7 +100,7 @@ class IncomeExpenseChart extends StatelessWidget {
         const SizedBox(width: 4),
         Text(
           label,
-          style: AppTextStyles.labelSmall.copyWith(color: AppColors.darkText3),
+          style: AppTextStyles.labelSmall.copyWith(color: Colors.white.withValues(alpha: 0.6)),
         ),
       ],
     );
@@ -131,16 +130,16 @@ class _BarGroup extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            _bar(incomeH,  AppColors.green),
+            _bar(incomeH,  Colors.green),
             const SizedBox(width: 3),
-            _bar(expenseH, AppColors.red),
+            _bar(expenseH, Colors.red),
           ],
         ),
         const SizedBox(height: 6),
         Text(
           data.month,
           style: AppTextStyles.labelSmall.copyWith(
-            color:    AppColors.darkText3,
+            color:    Colors.white.withValues(alpha: 0.6),
             fontSize: 10,
           ),
         ),
@@ -155,7 +154,7 @@ class _BarGroup extends StatelessWidget {
       width:    10,
       height:   height.clamp(4, 110),
       decoration: BoxDecoration(
-        color:        color.withOpacity(0.85),
+        color:        color.withValues(alpha: 0.85),
         borderRadius: const BorderRadius.vertical(top: Radius.circular(4)),
       ),
     );

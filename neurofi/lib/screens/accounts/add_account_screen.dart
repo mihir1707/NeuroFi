@@ -19,7 +19,7 @@ class _AddAccountScreenState extends State<AddAccountScreen> {
   final _last4Controller   = TextEditingController();
   String _type     = 'bank';
   String _icon     = '🏦';
-  String _currency = 'INR';
+  final String _currency = 'INR';
   String _color    = '#40513B';
 
   static const _typeIcons = {
@@ -27,17 +27,17 @@ class _AddAccountScreenState extends State<AddAccountScreen> {
     'debit_card': '💳', 'wallet': '👛', 'investment': '📈', 'loan': '🏧',
   };
 
-  static const _colors = ['#40513B','#9DC08B','#FFC94D','#F38181','#E89F71','#F875AA','#306D29','#DA0037'];
+  static const _colors = ['#FFFFFF','#CCCCCC','#AAAAAA','#888888','#666666','#444444','#222222','#111111'];
 
   InputDecoration get _dec => InputDecoration(
-    filled: true, fillColor: AppColors.darkBg1,
+    filled: true, fillColor: const Color(0xFF111111),
     border: OutlineInputBorder(borderRadius: BorderRadius.circular(12),
-        borderSide: const BorderSide(color: AppColors.darkBorder)),
+        borderSide: const BorderSide(color: Color(0x33FFFFFF))),
     enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12),
-        borderSide: const BorderSide(color: AppColors.darkBorder)),
+        borderSide: const BorderSide(color: Color(0x33FFFFFF))),
     focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12),
-        borderSide: const BorderSide(color: AppColors.green, width: 1.5)),
-    labelStyle: AppTextStyles.bodySmall.copyWith(color: AppColors.darkText3),
+        borderSide: const BorderSide(color: Colors.white, width: 1.5)),
+    labelStyle: AppTextStyles.bodySmall.copyWith(color: Colors.white.withValues(alpha: 0.6)),
   );
 
   Future<void> _submit() async {
@@ -68,7 +68,7 @@ class _AddAccountScreenState extends State<AddAccountScreen> {
 
   Color _parseColor(String hex) {
     try { return Color(int.parse(hex.replaceFirst('#', 'FF'), radix: 16)); }
-    catch (_) { return AppColors.sage; }
+    catch (_) { return Colors.white; }
   }
 
   @override
@@ -78,15 +78,15 @@ class _AddAccountScreenState extends State<AddAccountScreen> {
     final sym       = CurrencyFormatter.symbolFor(currency);
 
     return Scaffold(
-      backgroundColor: AppColors.darkBg0,
+      backgroundColor: Colors.black,
       appBar: AppBar(
-        backgroundColor: AppColors.darkBg0, elevation: 0,
+        backgroundColor: Colors.black, elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_rounded, color: AppColors.lightGrey, size: 18),
+          icon: const Icon(Icons.arrow_back_ios_rounded, color: Colors.white, size: 18),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text('New Account',
-            style: AppTextStyles.headingSmall.copyWith(color: AppColors.lightGrey)),
+            style: AppTextStyles.headingSmall.copyWith(color: Colors.white)),
         centerTitle: true,
       ),
       body: Column(
@@ -97,42 +97,46 @@ class _AddAccountScreenState extends State<AddAccountScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: _typeIcons.entries.map((e) {
-                      final sel = e.key == _type;
-                      return GestureDetector(
-                        onTap: () => setState(() { _type = e.key; _icon = e.value; }),
-                        child: Container(
-                          width: 44, height: 44,
-                          margin: const EdgeInsets.symmetric(horizontal: 4),
-                          decoration: BoxDecoration(
-                            color: sel ? AppColors.forest : AppColors.darkBg1,
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(color: sel ? AppColors.green : AppColors.darkBorder),
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    physics: const BouncingScrollPhysics(),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: _typeIcons.entries.map((e) {
+                        final sel = e.key == _type;
+                        return GestureDetector(
+                          onTap: () => setState(() { _type = e.key; _icon = e.value; }),
+                          child: Container(
+                            width: 44, height: 44,
+                            margin: const EdgeInsets.symmetric(horizontal: 4),
+                            decoration: BoxDecoration(
+                              color: sel ? Colors.white.withValues(alpha: 0.1) : const Color(0xFF111111),
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(color: sel ? Colors.white : const Color(0x33FFFFFF)),
+                            ),
+                            child: Center(child: Text(e.value, style: const TextStyle(fontSize: 20))),
                           ),
-                          child: Center(child: Text(e.value, style: const TextStyle(fontSize: 20))),
-                        ),
-                      );
-                    }).toList(),
+                        );
+                      }).toList(),
+                    ),
                   ),
                   const SizedBox(height: 20),
                   TextField(
                     controller: _nameController,
-                    style: AppTextStyles.bodyMedium.copyWith(color: AppColors.lightGrey),
+                    style: AppTextStyles.bodyMedium.copyWith(color: Colors.white),
                     decoration: _dec.copyWith(labelText: 'Account Name'),
                   ),
                   const SizedBox(height: 12),
                   TextField(
                     controller: _balanceController,
                     keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
-                    style: AppTextStyles.bodyMedium.copyWith(color: AppColors.lightGrey),
+                    style: AppTextStyles.bodyMedium.copyWith(color: Colors.white),
                     decoration: _dec.copyWith(labelText: 'Initial Balance', prefixText: '$sym '),
                   ),
                   const SizedBox(height: 12),
                   TextField(
                     controller: _institutionController,
-                    style: AppTextStyles.bodyMedium.copyWith(color: AppColors.lightGrey),
+                    style: AppTextStyles.bodyMedium.copyWith(color: Colors.white),
                     decoration: _dec.copyWith(labelText: 'Bank / Institution (optional)'),
                   ),
                   const SizedBox(height: 12),
@@ -140,30 +144,10 @@ class _AddAccountScreenState extends State<AddAccountScreen> {
                     controller: _last4Controller,
                     keyboardType: TextInputType.number,
                     maxLength: 4,
-                    style: AppTextStyles.bodyMedium.copyWith(color: AppColors.lightGrey),
+                    style: AppTextStyles.bodyMedium.copyWith(color: Colors.white),
                     decoration: _dec.copyWith(labelText: 'Last 4 digits (optional)', counterText: ''),
                   ),
-                  const SizedBox(height: 16),
-                  Text('Color', style: AppTextStyles.labelMedium.copyWith(color: AppColors.darkText3)),
-                  const SizedBox(height: 8),
-                  Wrap(
-                    spacing: 10,
-                    children: _colors.map((c) {
-                      final color = _parseColor(c);
-                      final sel   = c == _color;
-                      return GestureDetector(
-                        onTap: () => setState(() => _color = c),
-                        child: Container(
-                          width: 34, height: 34,
-                          decoration: BoxDecoration(
-                            color: color, shape: BoxShape.circle,
-                            border: Border.all(color: sel ? AppColors.lightGrey : Colors.transparent, width: 2.5),
-                          ),
-                          child: sel ? const Icon(Icons.check_rounded, color: Colors.white, size: 16) : null,
-                        ),
-                      );
-                    }).toList(),
-                  ),
+
                 ],
               ),
             ),
@@ -175,14 +159,14 @@ class _AddAccountScreenState extends State<AddAccountScreen> {
               child: Container(
                 width: double.infinity, height: 52,
                 decoration: BoxDecoration(
-                  gradient: const LinearGradient(colors: [AppColors.forest, AppColors.green]),
+                  color: Colors.white,
                   borderRadius: BorderRadius.circular(14),
                 ),
                 child: Center(child: isLoading
                     ? const SizedBox(width: 22, height: 22,
-                        child: CircularProgressIndicator(color: AppColors.lightGrey, strokeWidth: 2))
+                        child: CircularProgressIndicator(color: Colors.black, strokeWidth: 2))
                     : Text('Add Account',
-                        style: AppTextStyles.buttonText.copyWith(color: AppColors.lightGrey))),
+                        style: AppTextStyles.buttonText.copyWith(color: Colors.black))),
               ),
             ),
           ),

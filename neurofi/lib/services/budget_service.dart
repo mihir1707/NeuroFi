@@ -7,8 +7,8 @@ class BudgetService {
 
   Future<List<BudgetModel>> getBudgets({bool? isActive, String? period}) async {
     final response = await _dio.get('/budgets', queryParameters: {
-      if (isActive != null) 'isActive': isActive,
-      if (period != null)   'period':   period,
+      'isActive': ?isActive,
+      'period':   ?period,
     });
     final List data = response.data['data'];
     return data.map((item) => BudgetModel.fromJson(item)).toList();

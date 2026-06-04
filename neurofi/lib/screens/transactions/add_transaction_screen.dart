@@ -71,9 +71,9 @@ class _AddTransactionScreenState extends State<AddTransactionScreen>
 
   Color get _typeColor {
     switch (_selectedType) {
-      case 'income':   return AppColors.green;
-      case 'transfer': return AppColors.amber;
-      default:         return AppColors.red;
+      case 'income':   return Colors.green;
+      case 'transfer': return Colors.amber;
+      default:         return Colors.red;
     }
   }
 
@@ -117,16 +117,16 @@ class _AddTransactionScreenState extends State<AddTransactionScreen>
     final sym        = CurrencyFormatter.symbolFor(currency);
 
     return Scaffold(
-      backgroundColor: AppColors.darkBg0,
+      backgroundColor: Colors.black,
       appBar: AppBar(
-        backgroundColor: AppColors.darkBg0,
+        backgroundColor: Colors.black,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.close_rounded, color: AppColors.lightGrey),
+          icon: const Icon(Icons.close_rounded, color: Colors.white),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text('New Transaction',
-            style: AppTextStyles.headingSmall.copyWith(color: AppColors.lightGrey)),
+            style: AppTextStyles.headingSmall.copyWith(color: Colors.white)),
         centerTitle: true,
       ),
       body: Column(
@@ -158,23 +158,23 @@ class _AddTransactionScreenState extends State<AddTransactionScreen>
       margin: const EdgeInsets.fromLTRB(20, 8, 20, 0),
       height: 44,
       decoration: BoxDecoration(
-        color: AppColors.darkBg1,
+        color: const Color(0xFF111111),
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: AppColors.darkBorder),
+        border: Border.all(color: const Color(0x33FFFFFF)),
       ),
       child: TabBar(
         controller: _typeController,
         indicator: BoxDecoration(
-          color: _typeColor.withOpacity(0.2),
+          color: _typeColor.withValues(alpha: 0.2),
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: _typeColor.withOpacity(0.5)),
+          border: Border.all(color: _typeColor.withValues(alpha: 0.5)),
         ),
         indicatorSize: TabBarIndicatorSize.tab,
         dividerColor: Colors.transparent,
         labelStyle: AppTextStyles.labelMedium.copyWith(fontWeight: FontWeight.w700),
         unselectedLabelStyle: AppTextStyles.labelMedium,
         labelColor: _typeColor,
-        unselectedLabelColor: AppColors.darkText3,
+        unselectedLabelColor: Colors.white.withValues(alpha: 0.6),
         tabs: const [
           Tab(text: 'Expense', height: 42),
           Tab(text: 'Income', height: 42),
@@ -190,12 +190,12 @@ class _AddTransactionScreenState extends State<AddTransactionScreen>
       padding: const EdgeInsets.symmetric(vertical: 24),
       child: Column(
         children: [
-          Text('Amount', style: AppTextStyles.labelMedium.copyWith(color: AppColors.darkText3)),
+          Text('Amount', style: AppTextStyles.labelMedium.copyWith(color: Colors.white.withValues(alpha: 0.6))),
           const SizedBox(height: 8),
           Text(
             _amount.isEmpty ? '${sym}0' : '$sym$_amount',
             style: AppTextStyles.displayLarge.copyWith(
-              color: _amount.isEmpty ? AppColors.darkText3 : _typeColor,
+              color: _amount.isEmpty ? Colors.white.withValues(alpha: 0.6) : _typeColor,
               fontSize: 48,
             ),
           ),
@@ -222,15 +222,15 @@ class _AddTransactionScreenState extends State<AddTransactionScreen>
           onTap: () => _onNumpad(key),
           child: Container(
             decoration: BoxDecoration(
-              color: key == '⌫' ? AppColors.darkBg2 : AppColors.darkBg1,
+              color: key == '⌫' ? const Color(0xFF222222) : const Color(0xFF111111),
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: AppColors.darkBorder),
+              border: Border.all(color: const Color(0x33FFFFFF)),
             ),
             child: Center(
               child: key == '⌫'
-                  ? const Icon(Icons.backspace_outlined, color: AppColors.darkText2, size: 18)
+                  ? Icon(Icons.backspace_outlined, color: Colors.white.withValues(alpha: 0.6), size: 18)
                   : Text(key, style: AppTextStyles.headingMedium.copyWith(
-                      color: AppColors.lightGrey)),
+                      color: Colors.white)),
             ),
           ),
         );
@@ -241,27 +241,27 @@ class _AddTransactionScreenState extends State<AddTransactionScreen>
   Widget _buildFields(List<AccountModel> accounts, List<CategoryModel> categories) {
     final inputDecoration = InputDecoration(
       filled: true,
-      fillColor: AppColors.darkBg1,
+      fillColor: const Color(0xFF111111),
       border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: AppColors.darkBorder)),
+          borderSide: const BorderSide(color: Color(0x33FFFFFF))),
       enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: AppColors.darkBorder)),
+          borderSide: const BorderSide(color: Color(0x33FFFFFF))),
       focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: AppColors.green, width: 1.5)),
-      labelStyle: AppTextStyles.bodySmall.copyWith(color: AppColors.darkText3),
-      hintStyle: AppTextStyles.bodySmall.copyWith(color: AppColors.darkText3),
+          borderSide: const BorderSide(color: Colors.white, width: 1.5)),
+      labelStyle: AppTextStyles.bodySmall.copyWith(color: Colors.white.withValues(alpha: 0.6)),
+      hintStyle: AppTextStyles.bodySmall.copyWith(color: Colors.white.withValues(alpha: 0.6)),
     );
 
     return Column(
       children: [
         DropdownButtonFormField<AccountModel>(
-          value: _selectedAccount,
+          initialValue: _selectedAccount,
           decoration: inputDecoration.copyWith(labelText: 'From Account'),
-          dropdownColor: AppColors.darkBg1,
-          style: AppTextStyles.bodyMedium.copyWith(color: AppColors.lightGrey),
+          dropdownColor: const Color(0xFF111111),
+          style: AppTextStyles.bodyMedium.copyWith(color: Colors.white),
           items: accounts.map((a) => DropdownMenuItem(
             value: a,
             child: Row(children: [
@@ -275,10 +275,10 @@ class _AddTransactionScreenState extends State<AddTransactionScreen>
         const SizedBox(height: 12),
         if (_selectedType == 'transfer') ...[
           DropdownButtonFormField<AccountModel>(
-            value: _transferToAccount,
+            initialValue: _transferToAccount,
             decoration: inputDecoration.copyWith(labelText: 'To Account'),
-            dropdownColor: AppColors.darkBg1,
-            style: AppTextStyles.bodyMedium.copyWith(color: AppColors.lightGrey),
+            dropdownColor: const Color(0xFF111111),
+            style: AppTextStyles.bodyMedium.copyWith(color: Colors.white),
             items: accounts
                 .where((a) => a.id != _selectedAccount?.id)
                 .map((a) => DropdownMenuItem(
@@ -295,10 +295,10 @@ class _AddTransactionScreenState extends State<AddTransactionScreen>
         ],
         if (_selectedType != 'transfer') ...[
           DropdownButtonFormField<CategoryModel>(
-            value: _selectedCategory,
+            initialValue: _selectedCategory,
             decoration: inputDecoration.copyWith(labelText: 'Category (optional)'),
-            dropdownColor: AppColors.darkBg1,
-            style: AppTextStyles.bodyMedium.copyWith(color: AppColors.lightGrey),
+            dropdownColor: const Color(0xFF111111),
+            style: AppTextStyles.bodyMedium.copyWith(color: Colors.white),
             items: categories.map((c) => DropdownMenuItem(
               value: c,
               child: Row(children: [
@@ -313,10 +313,10 @@ class _AddTransactionScreenState extends State<AddTransactionScreen>
         ],
         TextField(
           controller: _descController,
-          style: AppTextStyles.bodyMedium.copyWith(color: AppColors.lightGrey),
+          style: AppTextStyles.bodyMedium.copyWith(color: Colors.white),
           decoration: inputDecoration.copyWith(
             labelText: 'Description',
-            prefixIcon: const Icon(Icons.notes_rounded, color: AppColors.darkText3, size: 18),
+            prefixIcon: Icon(Icons.notes_rounded, color: Colors.white.withValues(alpha: 0.6), size: 18),
           ),
         ),
         const SizedBox(height: 12),
@@ -329,7 +329,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen>
               lastDate: DateTime.now().add(const Duration(days: 365)),
               builder: (ctx, child) => Theme(
                 data: ThemeData.dark().copyWith(
-                  colorScheme: const ColorScheme.dark(primary: AppColors.green),
+                  colorScheme: const ColorScheme.dark(primary: Colors.white),
                 ),
                 child: child!,
               ),
@@ -339,17 +339,17 @@ class _AddTransactionScreenState extends State<AddTransactionScreen>
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
             decoration: BoxDecoration(
-              color: AppColors.darkBg1,
+              color: const Color(0xFF111111),
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: AppColors.darkBorder),
+              border: Border.all(color: const Color(0x33FFFFFF)),
             ),
             child: Row(
               children: [
-                const Icon(Icons.calendar_today_outlined, color: AppColors.darkText3, size: 18),
+                Icon(Icons.calendar_today_outlined, color: Colors.white.withValues(alpha: 0.6), size: 18),
                 const SizedBox(width: 12),
                 Text(
                   '${_selectedDate.day}/${_selectedDate.month}/${_selectedDate.year}',
-                  style: AppTextStyles.bodyMedium.copyWith(color: AppColors.lightGrey),
+                  style: AppTextStyles.bodyMedium.copyWith(color: Colors.white),
                 ),
               ],
             ),
@@ -359,31 +359,31 @@ class _AddTransactionScreenState extends State<AddTransactionScreen>
         TextField(
           controller: _notesController,
           maxLines: 2,
-          style: AppTextStyles.bodyMedium.copyWith(color: AppColors.lightGrey),
+          style: AppTextStyles.bodyMedium.copyWith(color: Colors.white),
           decoration: inputDecoration.copyWith(
             labelText: 'Notes (optional)',
-            prefixIcon: const Icon(Icons.sticky_note_2_outlined, color: AppColors.darkText3, size: 18),
+            prefixIcon: Icon(Icons.sticky_note_2_outlined, color: Colors.white.withValues(alpha: 0.6), size: 18),
           ),
         ),
         const SizedBox(height: 12),
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
           decoration: BoxDecoration(
-            color: AppColors.darkBg1,
+            color: const Color(0xFF111111),
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: AppColors.darkBorder),
+            border: Border.all(color: const Color(0x33FFFFFF)),
           ),
           child: Row(
             children: [
-              const Icon(Icons.repeat_rounded, color: AppColors.darkText3, size: 18),
+              Icon(Icons.repeat_rounded, color: Colors.white.withValues(alpha: 0.6), size: 18),
               const SizedBox(width: 12),
               Expanded(
                 child: Text('Recurring',
-                    style: AppTextStyles.bodyMedium.copyWith(color: AppColors.lightGrey)),
+                    style: AppTextStyles.bodyMedium.copyWith(color: Colors.white)),
               ),
               Switch(
                 value: _isRecurring,
-                activeColor: AppColors.green,
+                activeThumbColor: Colors.white,
                 onChanged: (v) => setState(() => _isRecurring = v),
               ),
             ],
@@ -392,10 +392,10 @@ class _AddTransactionScreenState extends State<AddTransactionScreen>
         if (_isRecurring) ...[
           const SizedBox(height: 12),
           DropdownButtonFormField<String>(
-            value: _recurrenceInterval,
+            initialValue: _recurrenceInterval,
             decoration: inputDecoration.copyWith(labelText: 'Repeats'),
-            dropdownColor: AppColors.darkBg1,
-            style: AppTextStyles.bodyMedium.copyWith(color: AppColors.lightGrey),
+            dropdownColor: const Color(0xFF111111),
+            style: AppTextStyles.bodyMedium.copyWith(color: Colors.white),
             items: ['daily','weekly','monthly','yearly']
                 .map((v) => DropdownMenuItem(value: v, child: Text(v.toUpperCase())))
                 .toList(),
@@ -409,9 +409,9 @@ class _AddTransactionScreenState extends State<AddTransactionScreen>
   Widget _buildSubmitButton(bool isCreating) {
     return Container(
       padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
-      decoration: BoxDecoration(
-        color: AppColors.darkBg0,
-        border: Border(top: BorderSide(color: AppColors.darkBorder)),
+      decoration: const BoxDecoration(
+        color: Colors.black,
+        border: Border(top: BorderSide(color: Color(0x33FFFFFF))),
       ),
       child: GestureDetector(
         onTap: isCreating ? null : _submit,
@@ -419,11 +419,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen>
           width: double.infinity,
           height: 52,
           decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: isCreating
-                  ? [AppColors.darkBg2, AppColors.darkBg2]
-                  : [AppColors.forest, AppColors.green],
-            ),
+            color: isCreating ? const Color(0xFF222222) : Colors.white,
             borderRadius: BorderRadius.circular(14),
           ),
           child: Center(
@@ -431,9 +427,9 @@ class _AddTransactionScreenState extends State<AddTransactionScreen>
                 ? const SizedBox(
                     width: 22, height: 22,
                     child: CircularProgressIndicator(
-                        color: AppColors.lightGrey, strokeWidth: 2))
+                        color: Colors.black, strokeWidth: 2))
                 : Text('Save Transaction',
-                    style: AppTextStyles.buttonText.copyWith(color: AppColors.lightGrey)),
+                    style: AppTextStyles.buttonText.copyWith(color: Colors.black)),
           ),
         ),
       ),

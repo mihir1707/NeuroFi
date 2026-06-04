@@ -88,7 +88,7 @@ class _DashboardScreenState extends State<DashboardScreen>
             : 'Good Evening';
 
     return SliverAppBar(
-      backgroundColor:    AppColors.darkBg0,
+      backgroundColor:    Colors.black,
       surfaceTintColor:   Colors.transparent,
       elevation:          0,
       floating:           true,
@@ -110,14 +110,14 @@ class _DashboardScreenState extends State<DashboardScreen>
                       Text(
                         '$greeting 👋',
                         style: AppTextStyles.labelMedium.copyWith(
-                          color: AppColors.darkText2,
+                          color: Colors.white.withValues(alpha: 0.6),
                         ),
                       ),
                       const SizedBox(height: 2),
                       Text(
                         name.split(' ').first,
                         style: AppTextStyles.headingMedium.copyWith(
-                          color: AppColors.lightGrey,
+                          color: Colors.white,
                         ),
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -127,8 +127,10 @@ class _DashboardScreenState extends State<DashboardScreen>
                 Row(
                   children: [
                     _iconButton(
-                      icon:    Icons.search_rounded,
-                      onTap:   () {},
+                      icon:    Icons.smart_toy_outlined,
+                      onTap:   () => Navigator.pushNamed(
+                        context, RouteNames.aiChat,
+                      ),
                     ),
                     const SizedBox(width: 8),
                     _iconButton(
@@ -138,8 +140,6 @@ class _DashboardScreenState extends State<DashboardScreen>
                       ),
                       badge: true,
                     ),
-                    const SizedBox(width: 8),
-                    _avatarButton(name),
                   ],
                 ),
               ],
@@ -161,14 +161,14 @@ class _DashboardScreenState extends State<DashboardScreen>
         width:  40,
         height: 40,
         decoration: BoxDecoration(
-          color:        AppColors.darkBg1,
+          color:        const Color(0xFF111111),
           borderRadius: BorderRadius.circular(12),
-          border:       Border.all(color: AppColors.darkBorder),
+          border:       Border.all(color: const Color(0x33FFFFFF)),
         ),
         child: Stack(
           alignment: Alignment.center,
           children: [
-            Icon(icon, color: AppColors.darkText2, size: 20),
+            Icon(icon, color: Colors.white, size: 20),
             if (badge)
               Positioned(
                 top:   8,
@@ -177,7 +177,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                   width:  7,
                   height: 7,
                   decoration: const BoxDecoration(
-                    color: AppColors.green,
+                    color: Colors.white,
                     shape: BoxShape.circle,
                   ),
                 ),
@@ -200,18 +200,15 @@ class _DashboardScreenState extends State<DashboardScreen>
         width:  40,
         height: 40,
         decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            colors: [AppColors.forest, AppColors.green],
-            begin:  Alignment.topLeft,
-            end:    Alignment.bottomRight,
-          ),
+          color:        const Color(0xFF111111),
           borderRadius: BorderRadius.circular(12),
+          border:       Border.all(color: const Color(0x33FFFFFF)),
         ),
         child: Center(
           child: Text(
             initials,
             style: AppTextStyles.labelMedium.copyWith(
-              color:      AppColors.lightGrey,
+              color:      Colors.white,
               fontWeight: FontWeight.w700,
             ),
           ),

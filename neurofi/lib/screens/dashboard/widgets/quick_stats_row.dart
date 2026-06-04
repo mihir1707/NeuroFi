@@ -65,7 +65,7 @@ class QuickStatsRow extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         padding:         const EdgeInsets.symmetric(horizontal: 20),
         itemCount:       stats.length,
-        separatorBuilder: (_, __) => const SizedBox(width: 12),
+        separatorBuilder: (_, _) => const SizedBox(width: 12),
         itemBuilder: (context, i) => _StatCard(stat: stats[i]),
       ),
     );
@@ -82,9 +82,9 @@ class _StatCard extends StatelessWidget {
       width: 130,
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
       decoration: BoxDecoration(
-        color:        AppColors.darkBg1,
+        color:        const Color(0xFF0A0A0A),
         borderRadius: BorderRadius.circular(16),
-        border:       Border.all(color: AppColors.darkBorder),
+        border:       Border.all(color: const Color(0x26FFFFFF)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -94,7 +94,7 @@ class _StatCard extends StatelessWidget {
             width:  32,
             height: 32,
             decoration: BoxDecoration(
-              color:        stat.color.withOpacity(0.15),
+              color:        stat.color.withValues(alpha: 0.15),
               borderRadius: BorderRadius.circular(10),
             ),
             child: Icon(stat.icon, color: stat.color, size: 16),
@@ -105,14 +105,14 @@ class _StatCard extends StatelessWidget {
               Text(
                 stat.value,
                 style: AppTextStyles.labelMedium.copyWith(
-                  color:      AppColors.lightGrey,
+                  color:      Colors.white,
                   fontWeight: FontWeight.w700,
                 ),
               ),
               Text(
                 stat.label,
                 style: AppTextStyles.labelSmall.copyWith(
-                  color: AppColors.darkText3,
+                  color: Colors.white.withValues(alpha: 0.4),
                 ),
               ),
             ],

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../../../core/utils/validators.dart';
 import '../../../providers/auth_provider.dart';
@@ -37,8 +36,6 @@ class _LoginFormState extends State<LoginForm> {
       password: _passwordController.text,
     );
 
-    // print(_emailController.text);
-
     if (!mounted) return;
 
     if (success) {
@@ -47,7 +44,7 @@ class _LoginFormState extends State<LoginForm> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(auth.errorMessage ?? 'Login failed. Please try again.'),
-          backgroundColor: AppColors.red,
+          backgroundColor: const Color.fromRGBO(255, 90, 95, 1),
           behavior: SnackBarBehavior.floating,
           margin: const EdgeInsets.all(16),
           shape: RoundedRectangleBorder(
@@ -88,7 +85,7 @@ class _LoginFormState extends State<LoginForm> {
       controller: _emailController,
       keyboardType: TextInputType.emailAddress,
       textInputAction: TextInputAction.next,
-      style: AppTextStyles.bodyMedium.copyWith(color: AppColors.lightGrey),
+      style: AppTextStyles.bodyMedium.copyWith(color: const Color.fromRGBO(245, 247, 250, 1)),
       validator: Validators.email,
       decoration: _buildDecoration(
         label: 'Email Address',
@@ -104,7 +101,7 @@ class _LoginFormState extends State<LoginForm> {
       obscureText: _obscurePassword,
       textInputAction: TextInputAction.done,
       onFieldSubmitted: (_) => _submit(),
-      style: AppTextStyles.bodyMedium.copyWith(color: AppColors.lightGrey),
+      style: AppTextStyles.bodyMedium.copyWith(color: const Color.fromRGBO(245, 247, 250, 1)),
       validator: Validators.password,
       decoration: _buildDecoration(
         label: 'Password',
@@ -118,7 +115,7 @@ class _LoginFormState extends State<LoginForm> {
               _obscurePassword
                   ? Icons.visibility_off_outlined
                   : Icons.visibility_outlined,
-              color: AppColors.darkText3,
+              color: const Color.fromARGB(255, 209, 205, 205),
               size: 20,
             ),
           ),
@@ -134,7 +131,7 @@ class _LoginFormState extends State<LoginForm> {
         onTap: () {},
         child: Text(
           'Forgot Password?',
-          style: AppTextStyles.labelMedium.copyWith(color: AppColors.sage),
+          style: AppTextStyles.labelMedium.copyWith(color: Colors.white),
         ),
       ),
     );
@@ -148,22 +145,14 @@ class _LoginFormState extends State<LoginForm> {
         width: double.infinity,
         height: 54,
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: isLoading
-                ? [
-                    AppColors.forest.withOpacity(0.6),
-                    AppColors.green.withOpacity(0.6),
-                  ]
-                : [AppColors.forest, AppColors.green],
-            begin: Alignment.centerLeft,
-            end: Alignment.centerRight,
-          ),
+          color: Colors.transparent,
           borderRadius: BorderRadius.circular(14),
+          border: Border.all(color: Colors.white, width: 1.5),
           boxShadow: isLoading
               ? []
               : [
                   BoxShadow(
-                    color: AppColors.green.withOpacity(0.35),
+                    color: const Color.fromARGB(255, 22, 22, 22),
                     blurRadius: 20,
                     offset: const Offset(0, 8),
                   ),
@@ -176,13 +165,16 @@ class _LoginFormState extends State<LoginForm> {
                   height: 22,
                   child: CircularProgressIndicator(
                     strokeWidth: 2.5,
-                    color: AppColors.lightGrey,
+                    color: Color.fromRGBO(245, 247, 250, 1),
                   ),
                 )
               : Text(
                   'Sign In',
                   style: AppTextStyles.buttonText.copyWith(
-                    color: AppColors.lightGrey,
+                    color: const Color.fromRGBO(245, 247, 250, 1),
+                    decorationColor: Colors.white,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 16,
                   ),
                 ),
         ),
@@ -193,17 +185,18 @@ class _LoginFormState extends State<LoginForm> {
   Widget _divider() {
     return Row(
       children: [
-        Expanded(child: Container(height: 1, color: AppColors.darkBorder)),
+        Expanded(child: Container(height: 1, color: Colors.white)),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Text(
             'or',
             style: AppTextStyles.labelSmall.copyWith(
-              color: AppColors.darkText3,
+              color: Colors.white,
+              fontSize: 14,
             ),
           ),
         ),
-        Expanded(child: Container(height: 1, color: AppColors.darkBorder)),
+        Expanded(child: Container(height: 1, color: Colors.white)),
       ],
     );
   }
@@ -214,7 +207,7 @@ class _LoginFormState extends State<LoginForm> {
       children: [
         Text(
           "Don't have an account? ",
-          style: AppTextStyles.bodySmall.copyWith(color: AppColors.darkText2),
+          style: AppTextStyles.bodySmall.copyWith(color: Colors.white),
         ),
         GestureDetector(
           onTap: () =>
@@ -222,10 +215,10 @@ class _LoginFormState extends State<LoginForm> {
           child: Text(
             'Sign Up',
             style: AppTextStyles.bodySmall.copyWith(
-              color: AppColors.sage,
+              color: Colors.white,
               fontWeight: FontWeight.w700,
               decoration: TextDecoration.underline,
-              decorationColor: AppColors.sage,
+              decorationColor: Colors.white,
             ),
           ),
         ),
@@ -242,42 +235,42 @@ class _LoginFormState extends State<LoginForm> {
     return InputDecoration(
       labelText: label,
       labelStyle: AppTextStyles.labelMedium.copyWith(
-        color: AppColors.darkText3,
+        color: const Color.fromARGB(255, 133, 130, 130),
       ),
       floatingLabelStyle: AppTextStyles.labelMedium.copyWith(
-        color: AppColors.green,
+        color: Colors.white,
         fontSize: 18,
       ),
       hintText: hint,
       hintStyle: AppTextStyles.bodyMedium.copyWith(
-        color: AppColors.darkText3.withOpacity(0.5),
+        color: const Color.fromARGB(255, 133, 130, 130),
       ),
       filled: true,
-      fillColor: AppColors.darkBg1,
-      prefixIcon: Icon(icon, color: AppColors.darkText3, size: 20),
+      fillColor: Colors.black,
+      prefixIcon: Icon(icon, color: const Color.fromARGB(255, 209, 205, 205), size: 20),
       suffixIcon: suffix,
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(14),
-        borderSide: const BorderSide(color: AppColors.darkBorder),
+        borderSide: const BorderSide(color: Color.fromARGB(255, 209, 205, 205)),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(14),
-        borderSide: const BorderSide(color: AppColors.darkBorder),
+        borderSide: const BorderSide(color: Color.fromARGB(255, 233, 226, 226)),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(14),
-        borderSide: const BorderSide(color: AppColors.green, width: 1.5),
+        borderSide: const BorderSide(color: Colors.white),
       ),
       errorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(14),
-        borderSide: const BorderSide(color: AppColors.red),
+        borderSide: const BorderSide(color: Color.fromARGB(255, 223, 193, 193)),
       ),
       focusedErrorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(14),
-        borderSide: const BorderSide(color: AppColors.red, width: 1.5),
+        borderSide: const BorderSide(color: Colors.white, width: 1.5),
       ),
-      errorStyle: AppTextStyles.labelSmall.copyWith(color: AppColors.salmon),
+      errorStyle: AppTextStyles.labelSmall.copyWith(color: Color.fromARGB(255, 223, 193, 193)),
     );
   }
 }

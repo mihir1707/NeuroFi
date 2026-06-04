@@ -137,7 +137,7 @@ class _NotifTile extends StatelessWidget {
           color: n.isRead ? AppColors.darkBg1 : AppColors.darkBg1,
           borderRadius: BorderRadius.circular(14),
           border: Border.all(
-              color: n.isRead ? AppColors.darkBorder : typeColor.withOpacity(0.3)),
+              color: n.isRead ? AppColors.darkBorder : typeColor.withValues(alpha: 0.3)),
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -145,7 +145,7 @@ class _NotifTile extends StatelessWidget {
             Container(
               width: 40, height: 40,
               decoration: BoxDecoration(
-                color: typeColor.withOpacity(0.12),
+                color: typeColor.withValues(alpha: 0.12),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Center(child: Text(n.icon, style: const TextStyle(fontSize: 18))),

@@ -13,7 +13,7 @@ class AiService {
     final response = await _dio.post('/ai/categorize', data: {
       'description': description,
       'amount':      amount,
-      if (merchantName != null) 'merchantName': merchantName,
+      'merchantName': ?merchantName,
     });
     return response.data['data'];
   }

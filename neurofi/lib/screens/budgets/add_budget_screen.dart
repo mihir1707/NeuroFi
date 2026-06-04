@@ -95,7 +95,7 @@ class _AddBudgetScreenState extends State<AddBudgetScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   DropdownButtonFormField<CategoryModel>(
-                    value: _selectedCategory,
+                    initialValue: _selectedCategory,
                     decoration: _inputDec.copyWith(labelText: 'Category'),
                     dropdownColor: AppColors.darkBg1,
                     style: AppTextStyles.bodyMedium.copyWith(color: AppColors.lightGrey),
@@ -161,7 +161,7 @@ class _AddBudgetScreenState extends State<AddBudgetScreen> {
                       activeTrackColor: AppColors.green,
                       inactiveTrackColor: AppColors.darkBg2,
                       thumbColor: AppColors.green,
-                      overlayColor: AppColors.green.withOpacity(0.15),
+                      overlayColor: AppColors.green.withValues(alpha: 0.15),
                     ),
                     child: Slider(
                       value: _alertThreshold,

@@ -153,10 +153,10 @@ class _SavingsGoalDetailScreenState extends State<SavingsGoalDetailScreen> {
             padding: const EdgeInsets.all(24),
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                  colors: [color.withOpacity(0.12), AppColors.darkBg1],
+                  colors: [color.withValues(alpha: 0.12), AppColors.darkBg1],
                   begin: Alignment.topCenter, end: Alignment.bottomCenter),
               borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: color.withOpacity(0.3)),
+              border: Border.all(color: color.withValues(alpha: 0.3)),
             ),
             child: Column(
               children: [
@@ -230,9 +230,9 @@ class _SavingsGoalDetailScreenState extends State<SavingsGoalDetailScreen> {
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: AppColors.green.withOpacity(0.1),
+                color: AppColors.green.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(14),
-                border: Border.all(color: AppColors.green.withOpacity(0.3)),
+                border: Border.all(color: AppColors.green.withValues(alpha: 0.3)),
               ),
               child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                 const Icon(Icons.check_circle_rounded, color: AppColors.green, size: 20),

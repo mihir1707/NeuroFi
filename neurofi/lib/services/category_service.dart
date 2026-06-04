@@ -7,7 +7,7 @@ class CategoryService {
 
   Future<List<CategoryModel>> getCategories({String? type}) async {
     final response = await _dio.get('/categories', queryParameters: {
-      if (type != null) 'type': type,
+      'type': ?type,
     });
     final List data = response.data['data'];
     return data.map((item) => CategoryModel.fromJson(item)).toList();

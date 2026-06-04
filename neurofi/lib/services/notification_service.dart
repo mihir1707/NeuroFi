@@ -13,7 +13,7 @@ class NotificationService {
     final response = await _dio.get('/notifications', queryParameters: {
       'page':  page,
       'limit': limit,
-      if (isRead != null) 'isRead': isRead,
+      'isRead': ?isRead,
     });
     final List data = response.data['data'];
     return data.map((item) => NotificationModel.fromJson(item)).toList();

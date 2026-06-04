@@ -6,6 +6,7 @@ import '../screens/splash/onboarding_screen.dart';
 import '../screens/auth/login/login_screen.dart';
 import '../screens/auth/register/register_screen.dart';
 import '../screens/screens.dart';
+import '../screens/main_shell.dart';
 
 class AppRouter {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -25,7 +26,7 @@ class AppRouter {
         return _build(const RegisterScreen());
 
       case RouteNames.dashboard:
-        return _build(const DashboardScreen());
+        return _build(const MainShell());
 
       case RouteNames.accounts:
         return _build(const AccountsScreen());

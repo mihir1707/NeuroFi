@@ -33,7 +33,7 @@ extension DoubleExtension on double {
 
 extension ColorExtension on Color {
   Color withOpacityValue(double opacity) {
-    return withOpacity(opacity);
+    return withValues(alpha: opacity);
   }
 
   Color get lighter => Color.lerp(this, Colors.white, 0.2) ?? this;

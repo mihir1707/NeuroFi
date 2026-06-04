@@ -85,9 +85,9 @@ class _AddSavingsGoalScreenState extends State<AddSavingsGoalScreen> {
                     child: Container(
                       width: 72, height: 72,
                       decoration: BoxDecoration(
-                        color: AppColors.forest.withOpacity(0.2),
+                        color: AppColors.forest.withValues(alpha: 0.2),
                         shape: BoxShape.circle,
-                        border: Border.all(color: AppColors.forest.withOpacity(0.5), width: 2),
+                        border: Border.all(color: AppColors.forest.withValues(alpha: 0.5), width: 2),
                       ),
                       child: Center(child: Text(_icon, style: const TextStyle(fontSize: 32))),
                     ),
@@ -126,7 +126,7 @@ class _AddSavingsGoalScreenState extends State<AddSavingsGoalScreen> {
                         onTap: () => setState(() => _icon = _emojis[i]),
                         child: Container(
                           decoration: BoxDecoration(
-                            color: sel ? AppColors.forest.withOpacity(0.3) : AppColors.darkBg1,
+                            color: sel ? AppColors.forest.withValues(alpha: 0.3) : AppColors.darkBg1,
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(color: sel ? AppColors.green : AppColors.darkBorder),
                           ),

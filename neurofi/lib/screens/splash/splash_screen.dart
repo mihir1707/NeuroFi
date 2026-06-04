@@ -20,7 +20,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> _startAnimations() async {
-    await Future.delayed(const Duration(milliseconds: 1900));
+    await Future.delayed(const Duration(milliseconds: 3000));
     _navigate();
   }
 
@@ -56,11 +56,11 @@ class _SplashScreenState extends State<SplashScreen> {
                   vertical: 24,
                 ),
                 decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(0.7),
+                  color: Colors.black.withValues(alpha: 0.7),
                   borderRadius: BorderRadius.circular(20),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.5),
+                      color: Colors.black.withValues(alpha: 0.5),
                       blurRadius: 20,
                       spreadRadius: 10,
                     ),

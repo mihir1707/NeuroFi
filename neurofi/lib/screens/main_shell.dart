@@ -120,15 +120,11 @@ class _MainShellState extends State<MainShell> with TickerProviderStateMixin {
               width:  58,
               height: 58,
               decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [AppColors.forest, AppColors.green],
-                  begin:  Alignment.topLeft,
-                  end:    Alignment.bottomRight,
-                ),
+                color: Colors.white,
                 shape: BoxShape.circle,
                 boxShadow: [
                   BoxShadow(
-                    color:      AppColors.green.withOpacity(0.45),
+                    color:      Colors.white.withValues(alpha: 0.18),
                     blurRadius: 20,
                     offset:     const Offset(0, 6),
                   ),
@@ -136,7 +132,7 @@ class _MainShellState extends State<MainShell> with TickerProviderStateMixin {
               ),
               child: const Icon(
                 Icons.add_rounded,
-                color: AppColors.lightGrey,
+                color: Colors.black,
                 size:  28,
               ),
             ),
@@ -169,13 +165,13 @@ class _BottomNavBar extends StatelessWidget {
     return Container(
       height: 72 + MediaQuery.of(context).padding.bottom,
       decoration: BoxDecoration(
-        color: AppColors.darkBg1,
-        border: Border(
-          top: BorderSide(color: AppColors.darkBorder.withOpacity(0.6), width: 1),
+        color: Colors.black,
+        border: const Border(
+          top: BorderSide(color: Color(0x26FFFFFF), width: 1),
         ),
         boxShadow: [
           BoxShadow(
-            color:      Colors.black.withOpacity(0.3),
+            color:      Colors.black.withValues(alpha: 0.6),
             blurRadius: 20,
             offset:     const Offset(0, -4),
           ),
@@ -215,14 +211,14 @@ class _BottomNavBar extends StatelessWidget {
                     padding:  const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
                     decoration: BoxDecoration(
                       color: selected
-                          ? AppColors.forest.withOpacity(0.25)
+                          ? Colors.white.withValues(alpha: 0.10)
                           : Colors.transparent,
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Icon(
                       selected ? item.activeIcon : item.icon,
                       size:  selected ? 24 : 22,
-                      color: selected ? AppColors.sage : AppColors.darkText3,
+                      color: selected ? Colors.white : Colors.white.withValues(alpha: 0.35),
                     ),
                   ),
                   const SizedBox(height: 3),
@@ -231,7 +227,7 @@ class _BottomNavBar extends StatelessWidget {
                     style: AppTextStyles.labelSmall.copyWith(
                       fontSize:   10,
                       fontWeight: selected ? FontWeight.w700 : FontWeight.w400,
-                      color:      selected ? AppColors.sage : AppColors.darkText3,
+                      color:      selected ? Colors.white : Colors.white.withValues(alpha: 0.35),
                     ),
                     child: Text(item.label),
                   ),

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
 import 'login_form.dart';
 
@@ -44,26 +43,50 @@ class _LoginScreenState extends State<LoginScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.darkBg0,
-      body: SafeArea(
+      backgroundColor: Colors.black,
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/images/account.png'),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: SafeArea(
         child: FadeTransition(
           opacity: _fadeAnim,
           child: SlideTransition(
             position: _slideAnim,
             child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 48),
-                  _buildHeader(),
-                  const SizedBox(height: 40),
-                  const LoginForm(),
-                  const SizedBox(height: 40),
-                ],
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+                decoration: BoxDecoration(
+                  color: Colors.black.withValues(alpha: 0.6),
+                  borderRadius: BorderRadius.circular(24),
+                  border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.4),
+                      blurRadius: 30,
+                      spreadRadius: 5,
+                      offset: const Offset(0, 10),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildHeader(),
+                    const SizedBox(height: 40),
+                    const LoginForm(),
+                  ],
+                ),
               ),
             ),
           ),
+        ),
         ),
       ),
     );
@@ -73,34 +96,12 @@ class _LoginScreenState extends State<LoginScreen>
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Container(
-          width:  60,
-          height: 60,
-          decoration: BoxDecoration(
-            gradient: const LinearGradient(
-              colors: [AppColors.forest, AppColors.green],
-              begin:  Alignment.topLeft,
-              end:    Alignment.bottomRight,
-            ),
-            borderRadius: BorderRadius.circular(18),
-            boxShadow: [
-              BoxShadow(
-                color:     AppColors.green.withOpacity(0.4),
-                blurRadius: 20,
-                offset:    const Offset(0, 6),
-              ),
-            ],
-          ),
-          child: const Center(
-            child: Text('⚡', style: TextStyle(fontSize: 30)),
-          ),
-        ),
         const SizedBox(height: 28),
         Center(
           child: Text(
             'Welcome back',
             style: AppTextStyles.displayMedium.copyWith(
-              color: AppColors.lightGrey,
+              color: Colors.white,
             ),
           ),
         ),
@@ -109,7 +110,7 @@ class _LoginScreenState extends State<LoginScreen>
           child: Text(
             'Sign in to your NeuroFi account',
             style: AppTextStyles.bodyMedium.copyWith(
-              color: AppColors.darkText2,
+              color: Colors.white,
             ),
           ),
         ),

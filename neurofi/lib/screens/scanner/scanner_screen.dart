@@ -63,7 +63,7 @@ class _ScannerScreenState extends State<ScannerScreen>
                     children: [
                       Container(
                         decoration: BoxDecoration(
-                          color: AppColors.darkBg1.withOpacity(0.4),
+                          color: AppColors.darkBg1.withValues(alpha: 0.4),
                           borderRadius: BorderRadius.circular(16),
                           border: Border.all(color: AppColors.darkBorder),
                         ),
@@ -72,7 +72,7 @@ class _ScannerScreenState extends State<ScannerScreen>
                       if (_isScanning)
                         AnimatedBuilder(
                           animation: _scanAnim,
-                          builder: (_, __) => Positioned(
+                          builder: (_, _) => Positioned(
                             top: _scanAnim.value * 300,
                             left: 0, right: 0,
                             child: Container(
@@ -81,7 +81,7 @@ class _ScannerScreenState extends State<ScannerScreen>
                                 gradient: LinearGradient(
                                   colors: [
                                     Colors.transparent,
-                                    AppColors.green.withOpacity(0.7),
+                                    AppColors.green.withValues(alpha: 0.7),
                                     Colors.transparent,
                                   ],
                                 ),
@@ -95,7 +95,7 @@ class _ScannerScreenState extends State<ScannerScreen>
                           children: [
                             Icon(
                               _isScanning ? Icons.camera_alt_rounded : Icons.receipt_long_rounded,
-                              color: AppColors.darkText3.withOpacity(0.5),
+                              color: AppColors.darkText3.withValues(alpha: 0.5),
                               size: 48,
                             ),
                             const SizedBox(height: 12),
@@ -143,7 +143,7 @@ class _ScannerScreenState extends State<ScannerScreen>
                   gradient: const LinearGradient(colors: [AppColors.forest, AppColors.green]),
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [BoxShadow(
-                      color: AppColors.green.withOpacity(0.3),
+                      color: AppColors.green.withValues(alpha: 0.3),
                       blurRadius: 12, offset: const Offset(0, 4))],
                 ),
                 child: Center(child: _isScanning

@@ -65,10 +65,10 @@ class _BudgetDetailScreenState extends State<BudgetDetailScreen> {
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-            colors: [color.withOpacity(0.1), AppColors.darkBg1],
+            colors: [color.withValues(alpha: 0.1), AppColors.darkBg1],
             begin: Alignment.topCenter, end: Alignment.bottomCenter),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: color.withOpacity(0.3)),
+        border: Border.all(color: color.withValues(alpha: 0.3)),
       ),
       child: Column(children: [
         SizedBox(

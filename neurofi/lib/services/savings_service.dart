@@ -7,7 +7,7 @@ class SavingsService {
 
   Future<List<SavingsGoalModel>> getSavingsGoals({String? status}) async {
     final response = await _dio.get('/savings', queryParameters: {
-      if (status != null) 'status': status,
+      'status': ?status,
     });
     final List data = response.data['data'];
     return data.map((item) => SavingsGoalModel.fromJson(item)).toList();
@@ -38,7 +38,7 @@ class SavingsService {
       'description':  description,
       'icon':         icon,
       'color':        color,
-      if (targetDate != null) 'targetDate': targetDate,
+      'targetDate': ?targetDate,
     });
     final goalData = response.data['data']['goal'] ?? response.data['data'];
     return SavingsGoalModel.fromJson(goalData);

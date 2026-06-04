@@ -37,7 +37,10 @@ class ErrorHandler {
       case 400:
         return ValidationException(message ?? 'Invalid request. Please check your input.');
       case 401:
-        return UnauthorizedException();
+        return AppException(
+          message ?? 'Invalid credentials. Please check your email and password.',
+          statusCode: 401,
+        );
       case 403:
         return AppException('You do not have permission to perform this action.', statusCode: 403);
       case 404:

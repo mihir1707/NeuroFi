@@ -7,7 +7,7 @@ class AiProvider extends ChangeNotifier {
 
   List<AiInsightModel> _insights = [];
   List<BudgetPredictionModel> _predictions = [];
-  List<Map<String, String>> _chatHistory = [];
+  final List<Map<String, String>> _chatHistory = [];
   bool _isLoadingInsights = false;
   bool _isSendingMessage = false;
   String? _errorMessage;

@@ -90,7 +90,7 @@ class _RegisterFormState extends State<RegisterForm> {
             controller:         _nameController,
             textInputAction:    TextInputAction.next,
             textCapitalization: TextCapitalization.words,
-            style:     AppTextStyles.bodyMedium.copyWith(color: AppColors.lightGrey),
+            style:     AppTextStyles.bodyMedium.copyWith(color: const Color.fromRGBO(245, 247, 250, 1)),
             validator: Validators.name,
             decoration: _buildDecoration(
               label: 'Full Name',
@@ -103,7 +103,7 @@ class _RegisterFormState extends State<RegisterForm> {
             controller:      _emailController,
             keyboardType:    TextInputType.emailAddress,
             textInputAction: TextInputAction.next,
-            style:     AppTextStyles.bodyMedium.copyWith(color: AppColors.lightGrey),
+            style:     AppTextStyles.bodyMedium.copyWith(color: const Color.fromRGBO(245, 247, 250, 1)),
             validator: Validators.email,
             decoration: _buildDecoration(
               label: 'Email Address',
@@ -116,7 +116,7 @@ class _RegisterFormState extends State<RegisterForm> {
             controller:      _phoneController,
             keyboardType:    TextInputType.phone,
             textInputAction: TextInputAction.next,
-            style:     AppTextStyles.bodyMedium.copyWith(color: AppColors.lightGrey),
+            style:     AppTextStyles.bodyMedium.copyWith(color: const Color.fromRGBO(245, 247, 250, 1)),
             validator: Validators.phone,
             decoration: _buildDecoration(
               label: 'Phone Number (optional)',
@@ -131,7 +131,7 @@ class _RegisterFormState extends State<RegisterForm> {
             controller:      _passwordController,
             obscureText:     _obscurePassword,
             textInputAction: TextInputAction.next,
-            style:     AppTextStyles.bodyMedium.copyWith(color: AppColors.lightGrey),
+            style:     AppTextStyles.bodyMedium.copyWith(color: const Color.fromRGBO(245, 247, 250, 1)),
             validator: Validators.password,
             decoration: _buildDecoration(
               label:  'Password',
@@ -149,7 +149,7 @@ class _RegisterFormState extends State<RegisterForm> {
             obscureText:      _obscureConfirm,
             textInputAction:  TextInputAction.done,
             onFieldSubmitted: (_) => _submit(),
-            style:     AppTextStyles.bodyMedium.copyWith(color: AppColors.lightGrey),
+            style:     AppTextStyles.bodyMedium.copyWith(color: const Color.fromRGBO(245, 247, 250, 1)),
             validator: (val) => Validators.confirmPassword(val, _passwordController.text),
             decoration: _buildDecoration(
               label:  'Confirm Password',
@@ -163,9 +163,9 @@ class _RegisterFormState extends State<RegisterForm> {
           ),
           const SizedBox(height: 28),
           _registerButton(isLoading),
-          const SizedBox(height: 24),
+          const SizedBox(height: 16),
           _divider(),
-          const SizedBox(height: 20),
+          const SizedBox(height: 12),
           _loginLink(),
         ],
       ),
@@ -176,37 +176,37 @@ class _RegisterFormState extends State<RegisterForm> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14),
       decoration: BoxDecoration(
-        color: AppColors.darkBg1,
+        color: Colors.black,
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: AppColors.darkBorder),
+        border: Border.all(color: const Color.fromARGB(255, 209, 205, 205)),
       ),
       child: Row(
         children: [
-          const Icon(Icons.currency_exchange_outlined, color: AppColors.darkText3, size: 20),
+          const Icon(Icons.currency_exchange_outlined, color: Color.fromARGB(255, 209, 205, 205), size: 20),
           const SizedBox(width: 12),
           Expanded(
             child: DropdownButtonHideUnderline(
               child: DropdownButton<String>(
                 value:         _selectedCurrency,
                 isExpanded:    true,
-                dropdownColor: AppColors.darkBg2,
+                dropdownColor: Colors.black,
                 menuMaxHeight: 280,
                 hint: Text(
                   'Default Currency',
-                  style: AppTextStyles.bodyMedium.copyWith(color: AppColors.darkText3),
+                  style: AppTextStyles.bodyMedium.copyWith(color: const Color.fromARGB(255, 133, 130, 130)),
                 ),
                 icon: const Icon(
                   Icons.keyboard_arrow_down_rounded,
-                  color: AppColors.darkText3,
+                  color: Color.fromARGB(255, 209, 205, 205),
                   size: 22,
                 ),
-                style: AppTextStyles.bodyMedium.copyWith(color: AppColors.lightGrey),
+                style: AppTextStyles.bodyMedium.copyWith(color: const Color.fromRGBO(245, 247, 250, 1)),
                 items: _currencies.map((c) {
                   return DropdownMenuItem<String>(
                     value: c['code'],
                     child: Text(
                       c['label']!,
-                      style: AppTextStyles.bodyMedium.copyWith(color: AppColors.lightGrey),
+                      style: AppTextStyles.bodyMedium.copyWith(color: const Color.fromRGBO(245, 247, 250, 1)),
                     ),
                   );
                 }).toList(),
@@ -226,40 +226,40 @@ class _RegisterFormState extends State<RegisterForm> {
       onTap: isLoading ? null : _submit,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
-        width:  double.infinity,
+        width: double.infinity,
         height: 54,
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: isLoading
-                ? [AppColors.forest.withOpacity(0.6), AppColors.green.withOpacity(0.6)]
-                : [AppColors.forest, AppColors.green],
-            begin: Alignment.centerLeft,
-            end:   Alignment.centerRight,
-          ),
+          color: Colors.transparent,
           borderRadius: BorderRadius.circular(14),
+          border: Border.all(color: Colors.white, width: 1.5),
           boxShadow: isLoading
               ? []
               : [
                   BoxShadow(
-                    color:      AppColors.green.withOpacity(0.35),
+                    color: const Color.fromARGB(255, 22, 22, 22),
                     blurRadius: 20,
-                    offset:     const Offset(0, 8),
+                    offset: const Offset(0, 8),
                   ),
                 ],
         ),
         child: Center(
           child: isLoading
               ? const SizedBox(
-                  width:  22,
+                  width: 22,
                   height: 22,
                   child: CircularProgressIndicator(
                     strokeWidth: 2.5,
-                    color: AppColors.lightGrey,
+                    color: Color.fromRGBO(245, 247, 250, 1),
                   ),
                 )
               : Text(
                   'Create Account',
-                  style: AppTextStyles.buttonText.copyWith(color: AppColors.lightGrey),
+                  style: AppTextStyles.buttonText.copyWith(
+                    color: const Color.fromRGBO(245, 247, 250, 1),
+                    decorationColor: Colors.white,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 16,
+                  ),
                 ),
         ),
       ),
@@ -269,15 +269,18 @@ class _RegisterFormState extends State<RegisterForm> {
   Widget _divider() {
     return Row(
       children: [
-        Expanded(child: Container(height: 1, color: AppColors.darkBorder)),
+        Expanded(child: Container(height: 1, color: Colors.white)),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Text(
             'or',
-            style: AppTextStyles.labelSmall.copyWith(color: AppColors.darkText3),
+            style: AppTextStyles.labelSmall.copyWith(
+              color: Colors.white,
+              fontSize: 14,
+            ),
           ),
         ),
-        Expanded(child: Container(height: 1, color: AppColors.darkBorder)),
+        Expanded(child: Container(height: 1, color: Colors.white)),
       ],
     );
   }
@@ -288,17 +291,17 @@ class _RegisterFormState extends State<RegisterForm> {
       children: [
         Text(
           'Already have an account? ',
-          style: AppTextStyles.bodySmall.copyWith(color: AppColors.darkText2),
+          style: AppTextStyles.bodySmall.copyWith(color: Colors.white),
         ),
         GestureDetector(
           onTap: () => Navigator.pushReplacementNamed(context, RouteNames.login),
           child: Text(
             'Sign In',
             style: AppTextStyles.bodySmall.copyWith(
-              color:           AppColors.sage,
-              fontWeight:      FontWeight.w700,
-              decoration:      TextDecoration.underline,
-              decorationColor: AppColors.sage,
+              color: Colors.white,
+              fontWeight: FontWeight.w700,
+              decoration: TextDecoration.underline,
+              decorationColor: Colors.white,
             ),
           ),
         ),
@@ -313,51 +316,58 @@ class _RegisterFormState extends State<RegisterForm> {
         padding: const EdgeInsets.all(12),
         child: Icon(
           isObscure ? Icons.visibility_off_outlined : Icons.visibility_outlined,
-          color: AppColors.darkText3,
-          size:  20,
+          color: const Color.fromARGB(255, 209, 205, 205),
+          size: 20,
         ),
       ),
     );
   }
 
   InputDecoration _buildDecoration({
-    required String   label,
-    required String   hint,
+    required String label,
+    required String hint,
     required IconData icon,
     Widget? suffix,
   }) {
     return InputDecoration(
-      labelText:          label,
-      labelStyle:         AppTextStyles.labelMedium.copyWith(color: AppColors.darkText3),
-      floatingLabelStyle: AppTextStyles.labelMedium.copyWith(color: AppColors.green, fontSize: 18),
-      hintText:  hint,
-      hintStyle: AppTextStyles.bodyMedium.copyWith(color: AppColors.darkText3.withOpacity(0.5)),
-      filled:    true,
-      fillColor: AppColors.darkBg1,
-      prefixIcon: Icon(icon, color: AppColors.darkText3, size: 20),
+      labelText: label,
+      labelStyle: AppTextStyles.labelMedium.copyWith(
+        color: const Color.fromARGB(255, 133, 130, 130),
+      ),
+      floatingLabelStyle: AppTextStyles.labelMedium.copyWith(
+        color: Colors.white,
+        fontSize: 18,
+      ),
+      hintText: hint,
+      hintStyle: AppTextStyles.bodyMedium.copyWith(
+        color: const Color.fromARGB(255, 133, 130, 130),
+      ),
+      filled: true,
+      fillColor: Colors.black,
+      prefixIcon: Icon(icon, color: const Color.fromARGB(255, 209, 205, 205), size: 20),
       suffixIcon: suffix,
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(14),
-        borderSide: const BorderSide(color: AppColors.darkBorder),
+        borderSide: const BorderSide(color: Color.fromARGB(255, 209, 205, 205)),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(14),
-        borderSide: const BorderSide(color: AppColors.darkBorder),
+        borderSide: const BorderSide(color: Color.fromARGB(255, 233, 226, 226)),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(14),
-        borderSide: const BorderSide(color: AppColors.green, width: 1.5),
+        borderSide: const BorderSide(color: Colors.white),
       ),
       errorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(14),
-        borderSide: const BorderSide(color: AppColors.red),
+        borderSide: const BorderSide(color: Color.fromARGB(255, 223, 193, 193)),
       ),
       focusedErrorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(14),
-        borderSide: const BorderSide(color: AppColors.red, width: 1.5),
+        borderSide: const BorderSide(color: Colors.white, width: 1.5),
       ),
-      errorStyle: AppTextStyles.labelSmall.copyWith(color: AppColors.salmon),
+      errorStyle: AppTextStyles.labelSmall.copyWith(color: Color.fromARGB(255, 223, 193, 193)),
     );
   }
 }
