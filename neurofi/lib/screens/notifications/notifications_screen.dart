@@ -131,50 +131,77 @@ class _NotifTile extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        margin: const EdgeInsets.only(bottom: 8),
-        padding: const EdgeInsets.all(14),
+        margin: const EdgeInsets.only(bottom: 12),
+        padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: n.isRead ? AppColors.darkBg1 : AppColors.darkBg1,
-          borderRadius: BorderRadius.circular(14),
+          color: n.isRead ? AppColors.darkBg1.withValues(alpha: 0.4) : typeColor.withValues(alpha: 0.05),
+          borderRadius: BorderRadius.circular(20),
           border: Border.all(
-              color: n.isRead ? AppColors.darkBorder : typeColor.withValues(alpha: 0.3)),
+              color: n.isRead ? AppColors.darkBorder.withValues(alpha: 0.5) : typeColor.withValues(alpha: 0.3),
+              width: n.isRead ? 1 : 1.5),
+          boxShadow: n.isRead ? [] : [
+            BoxShadow(
+              color: typeColor.withValues(alpha: 0.05),
+              blurRadius: 12,
+              spreadRadius: 2,
+            )
+          ],
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              width: 40, height: 40,
+              width: 48, height: 48,
               decoration: BoxDecoration(
-                color: typeColor.withValues(alpha: 0.12),
-                borderRadius: BorderRadius.circular(12),
+                color: n.isRead ? AppColors.darkBg0 : typeColor.withValues(alpha: 0.15),
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                  color: n.isRead ? AppColors.darkBorder : typeColor.withValues(alpha: 0.4),
+                ),
               ),
-              child: Center(child: Text(n.icon, style: const TextStyle(fontSize: 18))),
+              child: Center(child: Text(n.icon, style: const TextStyle(fontSize: 22))),
             ),
-            const SizedBox(width: 12),
+            const SizedBox(width: 16),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(n.title,
                       style: AppTextStyles.bodyMedium.copyWith(
-                          color: AppColors.lightGrey,
-                          fontWeight: n.isRead ? FontWeight.w400 : FontWeight.w700)),
-                  const SizedBox(height: 2),
+                          color: n.isRead ? AppColors.lightGrey.withValues(alpha: 0.8) : Colors.white,
+                          fontWeight: n.isRead ? FontWeight.w500 : FontWeight.w700,
+                          fontSize: 16,
+                          letterSpacing: 0.2)),
+                  const SizedBox(height: 6),
                   Text(n.body,
-                      style: AppTextStyles.bodySmall.copyWith(color: AppColors.darkText2),
+                      style: AppTextStyles.bodySmall.copyWith(
+                          color: n.isRead ? AppColors.darkText3 : AppColors.darkText2,
+                          height: 1.4),
                       maxLines: 2, overflow: TextOverflow.ellipsis),
-                  const SizedBox(height: 4),
-                  Text(
-                    n.createdAt != null ? DateFormatter.toRelative(n.createdAt!) : '',
-                    style: AppTextStyles.labelSmall.copyWith(color: AppColors.darkText3),
+                  const SizedBox(height: 10),
+                  Row(
+                    children: [
+                      const Icon(Icons.access_time_rounded, size: 12, color: AppColors.darkText3),
+                      const SizedBox(width: 4),
+                      Text(
+                        n.createdAt != null ? DateFormatter.toRelative(n.createdAt!) : '',
+                        style: AppTextStyles.labelSmall.copyWith(color: AppColors.darkText3, fontSize: 11),
+                      ),
+                    ],
                   ),
                 ],
               ),
             ),
             if (!n.isRead)
               Container(
-                width: 8, height: 8, margin: const EdgeInsets.only(top: 4),
-                decoration: BoxDecoration(color: typeColor, shape: BoxShape.circle),
+                width: 10, height: 10, margin: const EdgeInsets.only(top: 6, left: 8),
+                decoration: BoxDecoration(
+                  color: typeColor, 
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(color: typeColor.withValues(alpha: 0.6), blurRadius: 6, spreadRadius: 1)
+                  ]
+                ),
               ),
           ],
         ),

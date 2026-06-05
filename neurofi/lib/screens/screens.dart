@@ -14,6 +14,7 @@ export 'savings/savings_goal_detail_screen.dart';
 export 'analytics/analytics_screen.dart';
 export 'ai_chat/ai_chat_screen.dart';
 export 'ai_insights/ai_insights_screen.dart';
+export 'ai_insights/subscriptions_screen.dart';
 export 'categories/categories_screen.dart';
 export 'categories/add_category_screen.dart';
 export 'scanner/scanner_screen.dart';

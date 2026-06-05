@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../providers/account_provider.dart';
 import '../../providers/auth_provider.dart';
@@ -26,8 +25,6 @@ class _AddAccountScreenState extends State<AddAccountScreen> {
     'bank': '🏦', 'cash': '💵', 'credit_card': '💳',
     'debit_card': '💳', 'wallet': '👛', 'investment': '📈', 'loan': '🏧',
   };
-
-  static const _colors = ['#FFFFFF','#CCCCCC','#AAAAAA','#888888','#666666','#444444','#222222','#111111'];
 
   InputDecoration get _dec => InputDecoration(
     filled: true, fillColor: const Color(0xFF111111),
@@ -64,11 +61,6 @@ class _AddAccountScreenState extends State<AddAccountScreen> {
     _institutionController.dispose();
     _last4Controller.dispose();
     super.dispose();
-  }
-
-  Color _parseColor(String hex) {
-    try { return Color(int.parse(hex.replaceFirst('#', 'FF'), radix: 16)); }
-    catch (_) { return Colors.white; }
   }
 
   @override

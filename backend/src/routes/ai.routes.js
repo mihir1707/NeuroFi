@@ -9,6 +9,7 @@ import {
   getInsights,
   getBudgetPredictions,
   chatWithAI,
+  getSubscriptionInsights,
 } from "../controllers/ai.controller.js";
 import { authMiddleware } from "../middleware/auth.middleware.js";
 import { asyncHandler } from "../middleware/errorHandler.middleware.js";
@@ -48,6 +49,7 @@ router.delete("/categorize/preferences/:merchantKey", asyncHandler(deleteUserPre
 // ─── INSIGHTS & PREDICTIONS ───────────────────────────────────────────────────
 
 router.get("/insights", asyncHandler(getInsights));
+router.get("/subscriptions", asyncHandler(getSubscriptionInsights));
 router.get("/predict-budget", asyncHandler(getBudgetPredictions));
 
 

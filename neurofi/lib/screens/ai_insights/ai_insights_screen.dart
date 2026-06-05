@@ -61,6 +61,53 @@ class _AiInsightsScreenState extends State<AiInsightsScreen> {
                 children: [
                   _buildScoreRing(score),
                   const SizedBox(height: 24),
+                  
+                  // Subscription Hunter Banner
+                  GestureDetector(
+                    onTap: () => Navigator.pushNamed(context, '/subscriptions'),
+                    child: Container(
+                      padding: const EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        color: Colors.black,
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(color: Colors.white.withValues(alpha: 0.2)),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.white.withValues(alpha: 0.05),
+                            blurRadius: 10,
+                            offset: const Offset(0, 4),
+                          )
+                        ],
+                      ),
+                      child: Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              color: Colors.white.withValues(alpha: 0.1),
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Icon(Icons.manage_search_rounded, color: Colors.white, size: 28),
+                          ),
+                          const SizedBox(width: 16),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('Subscription Hunter',
+                                    style: AppTextStyles.labelMedium.copyWith(color: Colors.white, fontWeight: FontWeight.bold)),
+                                Text('Find zombie bills & save money',
+                                    style: AppTextStyles.labelSmall.copyWith(color: Colors.white.withValues(alpha: 0.6))),
+                              ],
+                            ),
+                          ),
+                          const Icon(Icons.chevron_right_rounded, color: Colors.white),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+
                   if (insights.isNotEmpty) ...[
                     Text('Smart Insights',
                         style: AppTextStyles.headingSmall.copyWith(color: Colors.white)),

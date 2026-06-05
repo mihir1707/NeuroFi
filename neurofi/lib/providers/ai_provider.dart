@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/ai_insight_model.dart';
+import '../models/subscription_model.dart';
 import '../services/ai_service.dart';
 
 class AiProvider extends ChangeNotifier {
@@ -7,8 +8,10 @@ class AiProvider extends ChangeNotifier {
 
   List<AiInsightModel> _insights = [];
   List<BudgetPredictionModel> _predictions = [];
+  SubscriptionInsightModel? _subscriptionInsights;
   final List<Map<String, String>> _chatHistory = [];
   bool _isLoadingInsights = false;
+  bool _isLoadingSubscriptions = false;
   bool _isSendingMessage = false;
   String? _errorMessage;
   String? _aiCategoryResult;
@@ -16,8 +19,10 @@ class AiProvider extends ChangeNotifier {
 
   List<AiInsightModel> get insights => _insights;
   List<BudgetPredictionModel> get predictions => _predictions;
+  SubscriptionInsightModel? get subscriptionInsights => _subscriptionInsights;
   List<Map<String, String>> get chatHistory => _chatHistory;
   bool get isLoadingInsights => _isLoadingInsights;
+  bool get isLoadingSubscriptions => _isLoadingSubscriptions;
   bool get isSendingMessage => _isSendingMessage;
   String? get errorMessage => _errorMessage;
   String? get aiCategoryResult => _aiCategoryResult;
@@ -58,6 +63,21 @@ class AiProvider extends ChangeNotifier {
       _setError(e.toString());
     } finally {
       _isLoadingInsights = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> loadSubscriptionInsights() async {
+    _isLoadingSubscriptions = true;
+    _setError(null);
+    notifyListeners();
+    try {
+      _subscriptionInsights = await _aiService.getSubscriptionInsights();
+      notifyListeners();
+    } catch (e) {
+      _setError(e.toString());
+    } finally {
+      _isLoadingSubscriptions = false;
       notifyListeners();
     }
   }

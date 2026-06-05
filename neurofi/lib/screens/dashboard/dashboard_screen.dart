@@ -6,6 +6,8 @@ import '../../providers/auth_provider.dart';
 import '../../providers/account_provider.dart';
 import '../../providers/transaction_provider.dart';
 import '../../providers/budget_provider.dart';
+import '../../providers/notification_provider.dart';
+import '../../providers/report_provider.dart';
 import '../../router/route_names.dart';
 import 'widgets/hero_balance_card.dart';
 import 'widgets/quick_stats_row.dart';
@@ -38,6 +40,8 @@ class _DashboardScreenState extends State<DashboardScreen>
       context.read<AccountProvider>().loadAccounts(),
       context.read<TransactionProvider>().loadTransactions(limit: 5),
       context.read<BudgetProvider>().loadActiveBudgets(),
+      context.read<NotificationProvider>().loadUnreadCount(),
+      context.read<ReportProvider>().loadDashboardData(),
     ]);
   }
 
@@ -49,6 +53,7 @@ class _DashboardScreenState extends State<DashboardScreen>
   Widget build(BuildContext context) {
     super.build(context);
     final user = context.watch<AuthProvider>().user;
+    final hasUnread = context.watch<NotificationProvider>().hasUnread;
 
     return Scaffold(
       backgroundColor: AppColors.darkBg0,
@@ -59,7 +64,7 @@ class _DashboardScreenState extends State<DashboardScreen>
         child: CustomScrollView(
           physics: const AlwaysScrollableScrollPhysics(),
           slivers: [
-            _buildAppBar(user?.name ?? 'User'),
+            _buildAppBar(user?.name ?? 'User', hasUnread),
             const SliverToBoxAdapter(child: SizedBox(height: 8)),
             const SliverToBoxAdapter(child: HeroBalanceCard()),
             const SliverToBoxAdapter(child: SizedBox(height: 20)),
@@ -79,7 +84,7 @@ class _DashboardScreenState extends State<DashboardScreen>
     );
   }
 
-  Widget _buildAppBar(String name) {
+  Widget _buildAppBar(String name, bool hasUnread) {
     final hour = DateTime.now().hour;
     final greeting = hour < 12
         ? 'Good Morning'
@@ -138,7 +143,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                       onTap: () => Navigator.pushNamed(
                         context, RouteNames.notifications,
                       ),
-                      badge: true,
+                      badge: hasUnread,
                     ),
                   ],
                 ),
@@ -188,32 +193,4 @@ class _DashboardScreenState extends State<DashboardScreen>
     );
   }
 
-  Widget _avatarButton(String name) {
-    final initials = name.trim().split(' ')
-        .take(2)
-        .map((w) => w.isNotEmpty ? w[0].toUpperCase() : '')
-        .join();
-
-    return GestureDetector(
-      onTap: () => Navigator.pushNamed(context, RouteNames.profile),
-      child: Container(
-        width:  40,
-        height: 40,
-        decoration: BoxDecoration(
-          color:        const Color(0xFF111111),
-          borderRadius: BorderRadius.circular(12),
-          border:       Border.all(color: const Color(0x33FFFFFF)),
-        ),
-        child: Center(
-          child: Text(
-            initials,
-            style: AppTextStyles.labelMedium.copyWith(
-              color:      Colors.white,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
 }

@@ -2,31 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
-import '../../../providers/transaction_provider.dart';
 import '../../../providers/budget_provider.dart';
 import '../../../providers/account_provider.dart';
+import '../../../providers/report_provider.dart';
 
 class QuickStatsRow extends StatelessWidget {
   const QuickStatsRow({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final transactions = context.watch<TransactionProvider>().transactions;
     final budgets      = context.watch<BudgetProvider>().budgets;
     final accounts     = context.watch<AccountProvider>().accounts;
 
-    final now       = DateTime.now();
-    final monthTxns = transactions.where((t) {
-      final date = DateTime.tryParse(t.transactionDate) ?? DateTime.now();
-      return date.month == now.month && date.year == now.year;
-    }).toList();
+    final report       = context.watch<ReportProvider>().monthlyReport;
 
-    final monthIncome  = monthTxns
-        .where((t) => t.isIncome)
-        .fold<double>(0, (s, t) => s + t.amount);
-    final monthExpense = monthTxns
-        .where((t) => t.isExpense)
-        .fold<double>(0, (s, t) => s + t.amount);
+    final monthTxnsCount = report?.transactionCount ?? 0;
+    final netSavings     = report?.netSavings ?? 0.0;
     final activeBudgets   = budgets.where((b) => b.isActive).length;
     final exceededBudgets = budgets.where((b) => b.isExceeded).length;
 
@@ -34,15 +25,15 @@ class QuickStatsRow extends StatelessWidget {
       _Stat(
         icon:  Icons.trending_up_rounded,
         label: 'This Month',
-        value: '${monthTxns.length} txns',
+        value: '$monthTxnsCount txns',
         color: AppColors.sage,
       ),
       _Stat(
         icon:  Icons.savings_outlined,
         label: 'Saved',
-        value: monthIncome > monthExpense
-            ? '+${(monthIncome - monthExpense).toStringAsFixed(0)}'
-            : '0',
+        value: netSavings >= 0
+            ? '+${netSavings.toStringAsFixed(0)}'
+            : netSavings.toStringAsFixed(0),
         color: AppColors.green,
       ),
       _Stat(

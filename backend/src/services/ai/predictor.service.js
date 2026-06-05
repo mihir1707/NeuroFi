@@ -1,5 +1,6 @@
 import { getOpenAIClient, isAIEnabled, AI_MODEL } from "../../config/openai.js";
 import Transaction from "../../models/Transaction.js";
+import mongoose from "mongoose";
 
 // CONSTANTS
 const ANALYSIS_MONTHS = 6;
@@ -31,7 +32,7 @@ const getMonthlySpendingByCategory = async (userId, months = ANALYSIS_MONTHS) =>
   const rawData = await Transaction.aggregate([
     {
       $match: {
-        user: userId,
+        user: new mongoose.Types.ObjectId(userId),
         type: "expense",
         transactionDate: { $gte: startDate, $lte: endDate },
         category: { $ne: null },

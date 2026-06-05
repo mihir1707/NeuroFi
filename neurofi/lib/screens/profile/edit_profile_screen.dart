@@ -56,6 +56,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
     setState(() => _isLoading = true);
     await Future.delayed(const Duration(milliseconds: 400));
+    if (!mounted) return;
 
     final user = context.read<AuthProvider>().user;
     if (user == null) { setState(() => _isLoading = false); return; }
@@ -68,6 +69,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       notificationsEnabled: _notificationsEnabled,
       aiInsightsEnabled:    _aiInsightsEnabled,
     );
+    if (!mounted) return;
     context.read<AuthProvider>().updateLocalUser(updated);
 
     setState(() => _isLoading = false);

@@ -79,7 +79,7 @@ class AuthProvider extends ChangeNotifier {
       notifyListeners();
       return true;
     } catch (e) {
-      print('[Auth] Login error: $e');
+      debugPrint('[Auth] Login error: $e');
       _setError(ErrorHandler.toUserMessage(e));
       return false;
     } finally {

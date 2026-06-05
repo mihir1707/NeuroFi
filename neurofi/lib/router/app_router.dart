@@ -73,6 +73,9 @@ class AppRouter {
       case RouteNames.aiInsights:
         return _build(const AiInsightsScreen());
 
+      case RouteNames.subscriptions:
+        return _build(const SubscriptionsScreen());
+
       case RouteNames.categories:
         return _build(const CategoriesScreen());
 

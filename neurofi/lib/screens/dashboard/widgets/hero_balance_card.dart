@@ -4,6 +4,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../../../providers/account_provider.dart';
 import '../../../providers/auth_provider.dart';
+import '../../../providers/report_provider.dart';
 import '../../../core/utils/currency_formatter.dart';
 
 class HeroBalanceCard extends StatefulWidget {
@@ -17,7 +18,6 @@ class _HeroBalanceCardState extends State<HeroBalanceCard>
     with SingleTickerProviderStateMixin {
   bool _balanceVisible = true;
   late AnimationController _shimmerController;
-  late Animation<double> _shimmer;
 
   @override
   void initState() {
@@ -26,9 +26,6 @@ class _HeroBalanceCardState extends State<HeroBalanceCard>
       vsync:    this,
       duration: const Duration(milliseconds: 1800),
     )..repeat();
-    _shimmer = Tween<double>(begin: -2, end: 2).animate(
-      CurvedAnimation(parent: _shimmerController, curve: Curves.easeInOut),
-    );
   }
 
   @override
@@ -45,8 +42,10 @@ class _HeroBalanceCardState extends State<HeroBalanceCard>
     final totalBalance    = accountProvider.totalBalance;
     final accounts        = accountProvider.accounts;
 
-    final totalIncome  = accounts.fold<double>(0, (s, a) => s + (a.balance > 0 ? a.balance : 0));
-    final totalExpense = accounts.fold<double>(0, (s, a) => s + (a.balance < 0 ? a.balance.abs() : 0));
+    final monthlyReport   = context.watch<ReportProvider>().monthlyReport;
+
+    final totalIncome  = monthlyReport?.totalIncome ?? 0.0;
+    final totalExpense = monthlyReport?.totalExpenses ?? 0.0;
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),

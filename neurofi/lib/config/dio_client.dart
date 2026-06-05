@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'app_config.dart';
 
@@ -19,7 +20,10 @@ class DioClient {
     _dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) async {
-          print('[DIO] ${options.method} ${options.path}');
+          debugPrint('DIO REQ: ${options.method} ${options.uri}');
+          if (options.data != null) {
+            // debugPrint('DATA: ${options.data}');
+          }
           final prefs = await SharedPreferences.getInstance();
           final token = prefs.getString('token');
           if (token != null && token.isNotEmpty) {
@@ -27,10 +31,13 @@ class DioClient {
           }
           return handler.next(options);
         },
-        onError: (error, handler) {
-          print('[DIO Error] ${error.response?.statusCode} — ${error.message}');
-          print('[DIO Error Details] ${error.response?.data}');
-          return handler.next(error);
+        onResponse: (response, handler) {
+          debugPrint('DIO RES [${response.statusCode}] ${response.requestOptions.uri}');
+          return handler.next(response);
+        },
+        onError: (DioException e, handler) {
+          debugPrint('DIO ERR: ${e.message} - ${e.response?.data}');
+          return handler.next(e);
         },
       ),
     );

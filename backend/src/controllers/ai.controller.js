@@ -6,6 +6,7 @@ import {
 import { generateInsights } from "../services/ai/insights.service.js";
 import { predictBudgets } from "../services/ai/predictor.service.js";
 import { chat } from "../services/ai/chatbot.service.js";
+import { detectAndAnalyzeSubscriptions } from "../services/ai/subscription.service.js";
 import {
   saveUserCorrection,
   listUserPreferences,
@@ -223,4 +224,9 @@ export const chatWithAI = async (req, res) => {
 
   const result = await chat(req.user._id.toString(), value.message, value.history);
   return sendSuccess(res, 200, "Response generated", result);
+};
+
+export const getSubscriptionInsights = async (req, res) => {
+  const result = await detectAndAnalyzeSubscriptions(req.user._id.toString());
+  return sendSuccess(res, 200, "Subscription insights generated", result);
 };

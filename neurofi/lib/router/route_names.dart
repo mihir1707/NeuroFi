@@ -19,6 +19,7 @@ class RouteNames {
   static const String analytics      = '/analytics';
   static const String aiChat         = '/ai-chat';
   static const String aiInsights     = '/ai-insights';
+  static const String subscriptions  = '/subscriptions';
   static const String categories     = '/categories';
   static const String addCategory    = '/categories/add';
   static const String scanner        = '/scanner';

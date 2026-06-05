@@ -130,14 +130,6 @@ class _CategoryCard extends StatelessWidget {
   final CategoryModel category;
   const _CategoryCard({required this.category});
 
-  Color _parseColor(String hex) {
-    try {
-      return Color(int.parse(hex.replaceFirst('#', 'FF'), radix: 16));
-    } catch (_) {
-      return Colors.white;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final typeLabel = category.type == 'income' ? 'Income'

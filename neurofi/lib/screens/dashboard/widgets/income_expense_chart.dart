@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../../../providers/transaction_provider.dart';
-import '../../../providers/auth_provider.dart';
 
 class IncomeExpenseChart extends StatelessWidget {
   const IncomeExpenseChart({super.key});
@@ -10,7 +9,6 @@ class IncomeExpenseChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final transactions = context.watch<TransactionProvider>().transactions;
-    final currency     = context.watch<AuthProvider>().user?.currency ?? 'INR';
 
     final now       = DateTime.now();
     final last6     = List.generate(6, (i) {

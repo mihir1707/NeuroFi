@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import '../config/dio_client.dart';
 import '../models/ai_insight_model.dart';
+import '../models/subscription_model.dart';
 
 class AiService {
   final Dio _dio = DioClient.instance;
@@ -38,6 +39,11 @@ class AiService {
     final response = await _dio.get('/ai/predict-budget');
     final List predictions = response.data['data']['predictions'];
     return predictions.map((item) => BudgetPredictionModel.fromJson(item)).toList();
+  }
+
+  Future<SubscriptionInsightModel> getSubscriptionInsights() async {
+    final response = await _dio.get('/ai/subscriptions');
+    return SubscriptionInsightModel.fromJson(response.data['data']);
   }
 
   Future<String> chat({
