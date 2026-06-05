@@ -276,7 +276,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
               // ── Currency Dropdown ───────────────────────────────────
               DropdownButtonFormField<String>(
-                value: _currency,
+                initialValue: _currency,
                 decoration: _buildDecoration(
                   label: 'Default Currency',
                   hint: '',
@@ -441,7 +441,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           Switch(
             value: value,
             onChanged: onChanged,
-            activeColor: Colors.white,
+            activeThumbColor: Colors.white,
             activeTrackColor: AppColors.green,
             inactiveThumbColor: const Color.fromARGB(255, 133, 130, 130),
             inactiveTrackColor: Colors.white10,

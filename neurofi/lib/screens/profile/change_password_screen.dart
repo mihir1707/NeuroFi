@@ -34,7 +34,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     if (p.length < 10 && !RegExp(r'[A-Z]').hasMatch(p)) return 'Medium';
     if (p.length >= 10 &&
         RegExp(r'[A-Z]').hasMatch(p) &&
-        RegExp(r'[0-9]').hasMatch(p)) return 'Strong';
+        RegExp(r'[0-9]').hasMatch(p)) {
+      return 'Strong';
+    }
     return 'Medium';
   }
 

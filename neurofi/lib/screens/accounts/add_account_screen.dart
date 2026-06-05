@@ -20,7 +20,7 @@ class _AddAccountScreenState extends State<AddAccountScreen> {
   String _type     = 'bank';
   String _icon     = '🏦';
   final String _currency = 'INR';
-  String _color    = '#40513B';
+  final String _color    = '#40513B';
 
   static const _typeIcons = {
     'bank': '🏦', 'cash': '💵', 'credit_card': '💳',
